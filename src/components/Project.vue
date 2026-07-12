@@ -69,7 +69,7 @@ export default {
           title:
             "Cauce: Panel de automatización de comunicación (WhatsApp + Email en tiempo real).",
           category: "Producto, Automatización, IA",
-          link: "https://github.com/diegorosso/comunica-flow",
+          link: "https://comunication-flow.netlify.app/",
         },
         {
           image: sukata,
