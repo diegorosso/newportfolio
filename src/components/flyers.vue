@@ -4,29 +4,37 @@
       Una muestra representativa de algunos diseños.
     </h3>
 
-    <div class="gallery">
+    <div
+      class="gallery"
+      @mouseenter="stopAutoSlide"
+      @mouseleave="startAutoSlide"
+      @focusin="stopAutoSlide"
+      @focusout="startAutoSlide"
+    >
       <img
         :src="images[currentIndex]"
-        alt="Obra destacada"
+        :alt="`Diseño ${currentIndex + 1} de ${images.length}`"
         class="gallery-item"
       />
 
-      <button class="nav-btn prev" @click="prevImage">
-        <img :src="back" alt="Back" class="arrow-icon" />
+      <button class="nav-btn prev" aria-label="Diseño anterior" @click="prevImage">
+        <img :src="back" alt="" class="arrow-icon" />
       </button>
 
-      <button class="nav-btn next" @click="nextImage">
-        <img :src="forward" alt="Forward" class="arrow-icon" />
+      <button class="nav-btn next" aria-label="Diseño siguiente" @click="nextImage">
+        <img :src="forward" alt="" class="arrow-icon" />
       </button>
 
       <div class="dots">
-        <span
+        <button
           v-for="(image, index) in images"
           :key="index"
+          type="button"
           class="dot"
           :class="{ active: index === currentIndex }"
+          :aria-label="`Ir al diseño ${index + 1}`"
           @click="goToImage(index)"
-        ></span>
+        ></button>
       </div>
     </div>
   </section>
@@ -64,6 +72,8 @@ export default {
       this.currentIndex = index;
     },
     startAutoSlide() {
+      clearInterval(this.interval);
+      if (this.prefersReducedMotion) return;
       this.interval = setInterval(this.nextImage, 3000);
     },
     stopAutoSlide() {
@@ -71,9 +81,12 @@ export default {
     },
   },
   mounted() {
+    this.prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
     this.startAutoSlide();
   },
-  beforeDestroy() {
+  beforeUnmount() {
     this.stopAutoSlide();
   },
 };
@@ -156,6 +169,7 @@ export default {
 .dot {
   width: 12px;
   height: 12px;
+  padding: 0;
   background-color: #ccc;
   border-radius: 50%;
   cursor: pointer;
@@ -164,5 +178,11 @@ export default {
 
 .dot.active {
   background-color: #333;
+}
+
+.dot:focus-visible,
+.nav-btn:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
 }
 </style>

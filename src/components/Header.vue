@@ -31,7 +31,7 @@
 
         <ul class="navbar-list">
           <li v-for="(link, index) in links" :key="index">
-            <a :href="link.href" class="navbar-link">{{ link.label }}</a>
+            <a :href="link.href" class="navbar-link" @click="closeNav">{{ link.label }}</a>
           </li>
         </ul>
       </nav>
@@ -84,6 +84,11 @@ export default {
   methods: {
     toggleNav() {
       this.isNavActive = !this.isNavActive;
+      document.body.classList.toggle("nav-active", this.isNavActive);
+    },
+    closeNav() {
+      this.isNavActive = false;
+      document.body.classList.remove("nav-active");
     },
     handleScroll() {
       this.isHeaderActive = window.scrollY > 0;

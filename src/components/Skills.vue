@@ -3,8 +3,10 @@
     class="carousel-container"
     @mouseover="pauseAutoPlay"
     @mouseleave="startAutoPlay"
+    @focusin="pauseAutoPlay"
+    @focusout="startAutoPlay"
   >
-    <button @click="prevSlide" class="carousel-btn left">&#10094;</button>
+    <button @click="prevSlide" class="carousel-btn left" aria-label="Tecnología anterior">&#10094;</button>
 
     <div class="carousel-wrapper">
       <div class="carousel">
@@ -25,16 +27,19 @@
       </div>
     </div>
 
-    <button @click="nextSlide" class="carousel-btn right">&#10095;</button>
+    <button @click="nextSlide" class="carousel-btn right" aria-label="Tecnología siguiente">&#10095;</button>
 
     <!-- Dots de navegación -->
     <div class="dots">
-      <span
+      <button
         v-for="(tech, index) in technologies"
         :key="index"
+        type="button"
+        class="dot"
         :class="{ active: index === currentIndex }"
+        :aria-label="`Ir a ${tech.name}`"
         @click="goToSlide(index)"
-      ></span>
+      ></button>
     </div>
   </div>
 </template>
@@ -203,6 +208,8 @@ export default {
       this.currentIndex = index;
     },
     startAutoPlay() {
+      clearInterval(this.autoplayInterval);
+      if (this.prefersReducedMotion) return;
       this.autoplayInterval = setInterval(this.nextSlide, 2000);
     },
     pauseAutoPlay() {
@@ -210,6 +217,9 @@ export default {
     },
   },
   mounted() {
+    this.prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
     this.startAutoPlay();
   },
   beforeUnmount() {
@@ -258,12 +268,20 @@ export default {
   margin-top: 10px;
   transition: transform 0.3s ease-in-out, filter 0.3s ease-in-out;
   cursor: pointer;
-  animation: glow 0.8s ease-in-out infinite alternate; /* Se aplica el brillo permanentemente */
+  animation: glow 2s ease-in-out infinite alternate;
 }
 
 .carousel-item img:hover {
-  animation: glow 0.8s ease-in-out infinite alternate;
   transform: scale(1.1);
+}
+
+@keyframes glow {
+  from {
+    filter: drop-shadow(0 0 0 rgba(255, 255, 255, 0));
+  }
+  to {
+    filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.6));
+  }
 }
 
 .carousel-text {
@@ -300,10 +318,11 @@ export default {
   margin-top: 10rem;
 }
 
-.dots span {
+.dots .dot {
   width: 12px;
   height: 12px;
   margin: 5px;
+  padding: 0;
   background-color: #ccc;
   border-radius: 50%;
   display: inline-block;
@@ -311,7 +330,13 @@ export default {
   transition: background 0.3s;
 }
 
-.dots span.active {
+.dots .dot.active {
   background-color: #000;
+}
+
+.dots .dot:focus-visible,
+.carousel-btn:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
 }
 </style>

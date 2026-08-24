@@ -1,8 +1,14 @@
 <template>
   <section class="section project" aria-label="my latest projects" id="project">
-    <div class="carousel-container">
+    <div
+      class="carousel-container"
+      @mouseenter="pauseAutoScroll"
+      @mouseleave="resumeAutoScroll"
+      @focusin="pauseAutoScroll"
+      @focusout="resumeAutoScroll"
+    >
       <!-- Botones de navegación -->
-      <button class="nav-button prev" @click="scrollPrev">‹</button>
+      <button class="nav-button prev" aria-label="Proyecto anterior" @click="scrollPrev">‹</button>
       <ul class="slider-list" ref="sliderList">
         <li
           class="slider-item"
@@ -40,7 +46,7 @@
           </div>
         </li>
       </ul>
-      <button class="nav-button next" @click="scrollNext">›</button>
+      <button class="nav-button next" aria-label="Proyecto siguiente" @click="scrollNext">›</button>
     </div>
   </section>
 </template>
@@ -157,14 +163,25 @@ export default {
     };
   },
   mounted() {
-    this.autoScroll = setInterval(() => {
-      this.scrollNext();
-    }, 4000); // cada 4 segundos
+    this.prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+    this.resumeAutoScroll();
   },
-  beforeDestroy() {
+  beforeUnmount() {
     clearInterval(this.autoScroll);
   },
   methods: {
+    pauseAutoScroll() {
+      clearInterval(this.autoScroll);
+    },
+    resumeAutoScroll() {
+      clearInterval(this.autoScroll);
+      if (this.prefersReducedMotion) return;
+      this.autoScroll = setInterval(() => {
+        this.scrollNext();
+      }, 4000); // cada 4 segundos
+    },
     scrollNext() {
       const container = this.$refs.sliderList;
       const maxScrollLeft = container.scrollWidth - container.clientWidth;
