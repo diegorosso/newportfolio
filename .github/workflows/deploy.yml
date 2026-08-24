@@ -34,7 +34,8 @@ jobs:
           protocol: ftps
           port: 21
           local-dir: ./dist/
-          server-dir: ./public_html/
+          # La cuenta FTP u730354980.porfolio ya tiene su raiz en public_html
+          server-dir: ./
           # El action recuerda qué subió y borra lo que saques del build.
-          # Antes del PRIMER deploy, vaciá public_html a mano (ver README de deploy).
+          # Antes del PRIMER deploy conviene vaciar public_html a mano.
           dangerous-clean-slate: false
