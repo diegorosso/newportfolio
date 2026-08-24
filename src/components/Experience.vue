@@ -23,8 +23,8 @@
 
 <script>
 import tuImg from "../assets/images/tuseguroimagenlogo.png";
-import neImg from "../assets/images/neuremi.png";
-import globalImg from "../assets/images/global.png";
+import neImg from "../assets/images/neuremi.webp";
+import globalImg from "../assets/images/global.webp";
 import mercedesImg from "../assets/images/mercedes-qa.png";
 
 export default {

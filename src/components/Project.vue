@@ -46,17 +46,17 @@
 </template>
 
 <script>
-import aviImg from "../assets/images/avifauna.png";
-import neuremify from "../assets/images/neuremi.png";
-import fbp from "../assets/images/fpb.png";
-import santa from "../assets/images/santa.png";
-import olimpiadas from "../assets/images/olimpiadas.png";
-import globali from "../assets/images/globali.png";
-import peregrinaciones from "../assets/images/peregrinaciones.png";
-import insan from "../assets/images/insan.png";
-import blocki from "../assets/images/blocki.png";
-import jdtex from "../assets/images/jdtex.png";
-import Village from "../assets/images/village.png";
+import aviImg from "../assets/images/avifauna.webp";
+import neuremify from "../assets/images/neuremi.webp";
+import fbp from "../assets/images/fpb.webp";
+import santa from "../assets/images/santa.webp";
+import olimpiadas from "../assets/images/olimpiadas.webp";
+import globali from "../assets/images/globali.webp";
+import peregrinaciones from "../assets/images/peregrinaciones.webp";
+import insan from "../assets/images/insan.webp";
+import blocki from "../assets/images/blocki.webp";
+import jdtex from "../assets/images/jdtex.webp";
+import Village from "../assets/images/Village.png";
 import cauce from "../assets/images/cauce.png";
 import pulso from "../assets/images/pulso.png";
 import sukata from "../assets/images/sukata.png";

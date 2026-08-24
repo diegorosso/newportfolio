@@ -12,7 +12,7 @@
         >
           <div class="light-effect"  ></div>
           <img
-            src="../assets/images/fonde.jpg"
+            src="../assets/images/fonde.webp"
             width="500"
             height="680"
             alt="Diego Rosso"

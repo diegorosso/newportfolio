@@ -33,11 +33,11 @@
 </template>
 
 <script>
-import ima1 from "../assets/images/1.jpg";
-import ima2 from "../assets/images/2.jpg";
-import ima3 from "../assets/images/3.jpg";
-import ima4 from "../assets/images/4.jpg";
-import ima5 from "../assets/images/5.jpg";
+import ima1 from "../assets/images/1.webp";
+import ima2 from "../assets/images/2.webp";
+import ima3 from "../assets/images/3.webp";
+import ima4 from "../assets/images/4.webp";
+import ima5 from "../assets/images/5.webp";
 import back from "../assets/images/back.svg";
 import forward from "../assets/images/forward.svg";
 
