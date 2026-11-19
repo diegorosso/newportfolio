@@ -1,57 +1,68 @@
 <template>
-  <section class="section project" aria-label="my latest projects" id="project">
-    <div
-      class="carousel-container"
-      @mouseenter="pauseAutoScroll"
-      @mouseleave="resumeAutoScroll"
-      @focusin="pauseAutoScroll"
-      @focusout="resumeAutoScroll"
-    >
-      <!-- Botones de navegación -->
-      <button class="nav-button prev" aria-label="Proyecto anterior" @click="scrollPrev">‹</button>
-      <ul class="slider-list" ref="sliderList">
-        <li
-          class="slider-item"
-          v-for="(project, index) in projects"
-          :key="index"
-        >
-          <div class="project-card text-center">
-            <div
-              class="card-banner img-holder has-before"
-              style="--width: 1000; --height: 763"
-            >
+  <section class="section project" aria-label="Proyectos" id="project">
+    <div class="wrap">
+      <SectionHead :index="2" :total="3" label="Trabajo" title="Proyectos seleccionados">
+        Algunos proyectos con los que trabajé recientemente: productos con IA,
+        tableros de datos y sitios web, de punta a punta.
+      </SectionHead>
+
+      <ul class="project-grid">
+        <li v-for="(project, index) in projects" :key="project.link" class="project-card" data-reveal>
+          <a
+            :href="project.link"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="card-link"
+            data-cursor="Ver"
+          >
+            <div class="card-media">
+              <video
+                v-if="project.video"
+                ref="videos"
+                :src="project.video"
+                :poster="project.image"
+                width="1280"
+                height="720"
+                muted
+                loop
+                playsinline
+                preload="none"
+                aria-hidden="true"
+              ></video>
               <img
+                v-else
                 :src="project.image"
                 width="1000"
                 height="763"
                 loading="lazy"
-                :alt="`Project poster: ${project.title}`"
-                class="img-cover"
+                :alt="`Captura de ${project.name}`"
               />
-
-              <a :href="project.link" class="btn btn:hover">
-                <span class="span">Visitar sitio</span>
-                <ion-icon name="arrow-forward" aria-hidden="true"></ion-icon>
-              </a>
             </div>
 
-            <div class="card-content">
-              <p class="card-subtitle">{{ project.category }}</p>
-              <h3 class="title h3">
-                <a :href="project.link" class="card-title">{{
-                  project.title
-                }}</a>
-              </h3>
+            <div class="card-meta">
+              <span class="label label-dim">
+                {{ pad(index + 1) }} / {{ pad(projects.length) }}
+              </span>
+              <ul class="card-tags">
+                <li v-for="tag in project.tags" :key="tag" class="chip">{{ tag }}</li>
+              </ul>
             </div>
-          </div>
+
+            <h3 class="h3 card-title">{{ project.name }}</h3>
+            <p class="card-text muted">{{ project.description }}</p>
+
+            <span class="label card-cta">
+              {{ project.cta || "Visitar sitio" }} <span class="arrow" aria-hidden="true">↗</span>
+            </span>
+          </a>
         </li>
       </ul>
-      <button class="nav-button next" aria-label="Proyecto siguiente" @click="scrollNext">›</button>
     </div>
   </section>
 </template>
 
 <script>
+import SectionHead from "./SectionHead.vue";
 import aviImg from "../assets/images/avifauna.webp";
 import neuremify from "../assets/images/neuremi.webp";
 import fbp from "../assets/images/fpb.webp";
@@ -66,259 +77,259 @@ import Village from "../assets/images/Village.png";
 import cauce from "../assets/images/cauce.png";
 import pulso from "../assets/images/pulso.png";
 import sukata from "../assets/images/sukata.png";
+import organismoPoster from "../assets/images/organismo.webp";
+import organismoVideo from "../assets/videos/organismo-loop.mp4"; // loop liviano para la tarjeta
+import organismoFull from "../assets/videos/organismo-1080p.mp4"; // render completo, solo al hacer clic
+
 export default {
+  components: { SectionHead },
   data() {
     return {
       projects: [
         {
+          image: organismoPoster,
+          video: organismoVideo,
+          name: "Organismo",
+          description:
+            "Pieza generativa en Unreal Engine 5: una masa de partículas Niagara que respira, con dithering Bayer 8×8 en post-proceso.",
+          tags: ["Unreal Engine", "Niagara", "Shader"],
+          link: organismoFull,
+          cta: "Ver video",
+        },
+        {
           image: cauce,
-          title:
-            "Cauce: Panel de automatización de comunicación (WhatsApp + Email en tiempo real).",
-          category: "Producto, Automatización, IA",
+          name: "Cauce",
+          description:
+            "Panel de automatización de comunicación (WhatsApp + Email en tiempo real).",
+          tags: ["Producto", "Automatización", "IA"],
           link: "https://comunication-flow.netlify.app/",
         },
         {
           image: sukata,
-          title:
-            "Sukata BJJ: Web de academia de Jiu Jitsu con chatbot de IA (Groq + Llama 3.1) integrado vía funciones serverless.",
-          category: "Web, Producto, IA",
+          name: "Sukata BJJ",
+          description:
+            "Web de academia de Jiu Jitsu con chatbot de IA (Groq + Llama 3.1) integrado vía funciones serverless.",
+          tags: ["Web", "Producto", "IA"],
           link: "https://sukata.netlify.app/",
         },
         {
           image: pulso,
-          title:
-            "Pulso: Tablero de métricas con datos en vivo de la API pública de GitHub.",
-          category: "Producto, Dashboard, IA",
+          name: "Pulso",
+          description:
+            "Tablero de métricas con datos en vivo de la API pública de GitHub.",
+          tags: ["Producto", "Dashboard", "IA"],
           link: "https://pulso-dash.netlify.app/",
         },
         {
           image: aviImg,
-          title: "Avifauna: El parque Ornitológico más grande de España.",
-          category: "Web",
+          name: "Avifauna",
+          description: "El parque ornitológico más grande de España.",
+          tags: ["Web"],
           link: "https://avifauna.net",
         },
         {
           image: neuremify,
-          title: "Nuremify: Aplicación para reducir el estrés y la ansiedad.",
-          category: "Aplicación",
+          name: "Neuromify",
+          description: "Aplicación para reducir el estrés y la ansiedad.",
+          tags: ["Aplicación"],
           link: "https://www.neuromify.com",
         },
         {
           image: fbp,
-          title: " FPB solar: Instalaciones Fotovoltaicas y Energía Solar.",
-          category: "Web, Product",
+          name: "FPB Solar",
+          description: "Instalaciones fotovoltaicas y energía solar.",
+          tags: ["Web", "Producto"],
           link: "https://www.fpbsolar.com/",
         },
         {
           image: santa,
-          title:
-            "Fundación La Santa Faz: Fundacion artistica, cultural y religiosa.",
-          category: "Web, Worpress",
+          name: "Fundación La Santa Faz",
+          description: "Fundación artística, cultural y religiosa.",
+          tags: ["Web", "WordPress"],
           link: "https://santafaz.org.ar/",
         },
         {
           image: olimpiadas,
-          title:
-            "Olimpiadas Rurais: Web para la organización de eventos deportivos.",
-          category: "Web",
+          name: "Olimpiadas Rurais",
+          description: "Web para la organización de eventos deportivos.",
+          tags: ["Web"],
           link: "https://lavender-chimpanzee-223227.hostingersite.com/",
         },
         {
           image: globali,
-          title: "Globanal MKT: Web de marketing y publicidad.",
-          category: "Web",
+          name: "Global MKT",
+          description: "Web de marketing y publicidad.",
+          tags: ["Web"],
           link: "https://globalmkt.com.ar",
         },
         {
           image: peregrinaciones,
-          title: "Peregrinaciones Marianas: Web de peregrinaciones religiosas.",
-          category: "Web",
+          name: "Peregrinaciones Marianas",
+          description: "Web de peregrinaciones religiosas.",
+          tags: ["Web"],
           link: "https://peregrinacionesmarianas.com.ar/",
         },
         {
           image: insan,
-          title: "Distribuidora Insa: Web de distribuidora, ferretería.",
-          category: "Web",
+          name: "Distribuidora Insa",
+          description: "Web de distribuidora y ferretería.",
+          tags: ["Web"],
           link: "https://distribuidorainsa.com.ar/",
         },
         {
           image: blocki,
-          title: "Blockinar: Web Tecnológica",
-          category: "Web",
+          name: "Blockinar",
+          description: "Web tecnológica.",
+          tags: ["Web"],
           link: "https://blockinar.com/",
         },
         {
           image: jdtex,
-          title: "Jdtex: fábrica de textiles y confección.",
-          category: "Web",
+          name: "Jdtex",
+          description: "Fábrica de textiles y confección.",
+          tags: ["Web"],
           link: "https://jdtexarg.com.ar/",
         },
         {
           image: Village,
-          title: "Village Polo Club: Web ropa deportiva.",
-          category: "Web, Wordpress",
+          name: "Village Polo Club",
+          description: "Web de ropa deportiva.",
+          tags: ["Web", "WordPress"],
           link: "https://villagepoloclub.com.ar/",
         },
       ],
     };
   },
   mounted() {
-    this.prefersReducedMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)"
-    ).matches;
-    this.resumeAutoScroll();
+    // Los videos de las tarjetas corren solo mientras se ven, y nunca con
+    // "reducir movimiento": en ese caso queda el póster.
+    const videos = this.$refs.videos ?? [];
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (!videos.length || reduceMotion || !("IntersectionObserver" in window)) return;
+
+    this.videoObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach(({ target, isIntersecting }) => {
+          if (isIntersecting) {
+            target.muted = true;
+            target.play().catch(() => {});
+          } else {
+            target.pause();
+          }
+        });
+      },
+      { threshold: 0.25 }
+    );
+    videos.forEach((video) => this.videoObserver.observe(video));
   },
   beforeUnmount() {
-    clearInterval(this.autoScroll);
+    this.videoObserver?.disconnect();
   },
   methods: {
-    pauseAutoScroll() {
-      clearInterval(this.autoScroll);
-    },
-    resumeAutoScroll() {
-      clearInterval(this.autoScroll);
-      if (this.prefersReducedMotion) return;
-      this.autoScroll = setInterval(() => {
-        this.scrollNext();
-      }, 4000); // cada 4 segundos
-    },
-    scrollNext() {
-      const container = this.$refs.sliderList;
-      const maxScrollLeft = container.scrollWidth - container.clientWidth;
-
-      if (container.scrollLeft >= maxScrollLeft - 10) {
-
-        container.scrollTo({
-          left: 0,
-          behavior: "smooth",
-        });
-      } else {
-        container.scrollBy({
-          left: container.offsetWidth,
-          behavior: "smooth",
-        });
-      }
-    },
-    scrollPrev() {
-      this.$refs.sliderList.scrollBy({
-        left: -this.$refs.sliderList.offsetWidth,
-        behavior: "smooth",
-      });
+    pad(n) {
+      return String(n).padStart(2, "0");
     },
   },
 };
 </script>
 
 <style scoped>
-.carousel-container {
+.project-grid {
+  display: grid;
+  gap: 56px 24px;
+}
+
+.card-link {
+  display: grid;
+  gap: 14px;
+}
+
+.card-media {
   position: relative;
+  aspect-ratio: 1000 / 763;
   overflow: hidden;
+  border: 1px solid var(--line);
+  background-color: var(--surface);
 }
 
-.nav-button {
-  position: absolute;
-  top: 50%;
-  z-index: 10;
-  transform: translateY(-50%);
-  background-color: rgba(0, 0, 0, 0.3);
-  color: white;
-  border: none;
-  font-size: 2rem;
-  padding: 0.5rem 1rem;
-  cursor: pointer;
-  transition: 0.3s ease;
-}
-.nav-button:hover {
-  background-color: rgba(0, 0, 0, 0.6);
-}
-.nav-button.prev {
-  left: 0;
-}
-.nav-button.next {
-  right: 0;
+.card-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: grayscale(1) contrast(1.05);
+  transition: filter 0.5s ease, transform 0.9s var(--ease-out);
 }
 
-.slider-list {
+.card-link:is(:hover, :focus-visible) .card-media img {
+  filter: none;
+  transform: scale(1.03);
+}
+
+.card-media video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.9s var(--ease-out);
+}
+
+.card-link:is(:hover, :focus-visible) .card-media video {
+  transform: scale(1.03);
+}
+
+.card-meta {
   display: flex;
-  align-items: flex-start;
-  gap: 30px;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  scroll-behavior: smooth;
-  padding-block-end: 5px;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding-block-start: 4px;
 }
-.slider-list::-webkit-scrollbar {
-  display: none;
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 6px;
 }
-.slider-item {
-  scroll-snap-align: start;
-  min-width: 100%;
+
+.card-title {
+  text-wrap: balance;
+}
+
+.card-text {
+  max-width: 44ch;
+  font-size: var(--fs-small);
+}
+
+.card-cta {
+  display: flex;
+  gap: 0.6em;
+  color: var(--muted);
+  transition: color var(--transition-1);
+}
+
+.card-link:is(:hover, :focus-visible) .card-cta {
+  color: var(--paper);
+}
+
+.card-cta .arrow {
+  transition: transform var(--transition-1);
+}
+
+.card-link:is(:hover, :focus-visible) .card-cta .arrow {
+  transform: translate(2px, -2px);
 }
 
 @media (min-width: 768px) {
-  .slider-item {
-    min-width: calc(50% - 15px);
+  .project-grid {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
-@media (min-width: 992px) {
-  .slider-item {
-    min-width: calc(33.33% - 20px);
+@media (min-width: 1200px) {
+  .project-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 72px 32px;
   }
-}
-
-/* Estilos originales del proyecto */
-.project-card .card-banner::before {
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  background-color: var(--bg-rich-black-fogra-29);
-  background-image: var(--gradient-2);
-  opacity: 0;
-  transition: var(--transition-1);
-}
-
-.project-card .card-banner:is(:hover, :focus-within)::before {
-  opacity: 0.9;
-}
-
-.project-card .btn {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -100%);
-  min-width: max-content;
-  opacity: 0;
-  transition: var(--transition-2);
-}
-
-.project-card .card-banner:is(:hover, :focus-within) .btn {
-  transform: translate(-50%, -50%);
-  opacity: 1;
-}
-
-.project-card .card-content {
-  padding: 24px 30px 0;
-}
-
-.project-card .card-subtitle {
-  font-size: var(--fontSize-10);
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  margin-block-end: 10px;
-}
-
-.project-card .card-title {
-  display: inline;
-  background-image: linear-gradient(var(--bg-white), var(--bg-white));
-  background-repeat: no-repeat;
-  background-position: left bottom;
-  background-size: 0 1px;
-  transition: var(--transition-1);
-}
-
-.project-card .card-title:is(:hover, :focus-visible) {
-  background-size: 100% 1px;
 }
 </style>

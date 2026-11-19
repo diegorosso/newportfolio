@@ -1,107 +1,85 @@
+/*-----------------------------------*\
+  #TOKENS
+\*-----------------------------------*/
+
 :root {
+  /* color (tema oscuro por defecto) */
+  --ink: #050505;
+  --paper: #f2f2ee;
+  --muted: rgba(242, 242, 238, 0.58);
+  --faint: rgba(242, 242, 238, 0.34);
+  --line: rgba(242, 242, 238, 0.12);
+  --line-strong: rgba(242, 242, 238, 0.28);
+  --surface: #0c0c0c;
+  --dot: rgba(242, 242, 238, 0.13);
+  --grain-opacity: 0.07;
 
-  .light-theme {
-    --bg-black: hsla(0, 0%, 100%, 1);
-    --bg-smoky-black: hsla(0, 0%, 96%, 1);
-    --bg-rich-black-fogra-29: hsla(0, 0%, 90%, 1);
-    --bg-eerie-black: hsla(0, 0%, 92%, 1);
-    --bg-jet: hsla(0, 0%, 85%, 1);
-  
-    --text-light-gray: hsla(0, 0%, 20%, 1);
-    --text-white: hsla(0, 0%, 0%, 1);
-  
-    --border-eerie-black: hsla(0, 0%, 80%, 1);
-    --border-smoky-black: hsla(0, 0%, 70%, 1);
-    --border-white: hsla(0, 0%, 0%, 1);
-  
-    --gradient-1: linear-gradient(to top, var(--bg-white) 0%, transparent 40%);
-  }
+  /* tipografía */
+  --fontFamily-display: "Big Shoulders Display", "Arial Narrow", sans-serif;
+  --fontFamily-sans: "Geist", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --fontFamily-mono: "Geist Mono", ui-monospace, SFMono-Regular, Consolas, monospace;
 
-  /**
-   * COLORS
-   */
+  --fs-label: 1.1rem;
+  --fs-small: 1.4rem;
+  --fs-body: 1.6rem;
+  --fs-lead: clamp(2.4rem, 1.6rem + 1.6vw, 3.6rem);
+  --fs-h3: clamp(2.8rem, 2rem + 1.8vw, 4.4rem);
+  --fs-h2: clamp(5.6rem, 3rem + 7vw, 14.4rem);
+  --fs-h1: clamp(5.6rem, 2.4rem + 7.4vw, 12.8rem);
 
-  /* background colors */
-  --bg-white: hsla(0, 0%, 100%, 1);
-  --bg-light-gray: hsla(240, 1%, 83%, 1);
-  --bg-jet: hsla(0, 0%, 18%, 1);
-  --bg-eerie-black: hsla(0, 0%, 13%, 1);
-  --bg-rich-black-fogra-29: hsla(229, 23%, 9%, 1);
-  --bg-smoky-black: hsla(0, 0%, 6%, 1);
-  --bg-black: hsla(0, 0%, 0%, 1);
-
-  /* gradient colors */
-  --gradient-1: linear-gradient(to top, var(--bg-black) 0%, transparent 40%);
-  --gradient-2: radial-gradient(circle at 75% 100%, hsla(0, 0%, 70%, 0.3) 0%, transparent 100%);
-
-  /* text colors */
-  --text-white: hsla(0, 0%, 100%, 1);
-  --text-light-gray: hsla(240, 1%, 83%, 1);
-  --text-rich-black-fogra-29: hsla(216, 42%, 12%, 1);
-  --text-smoky-black: hsla(0, 0%, 6%, 1);
-  --text-black: hsla(0, 0%, 0%, 1);
-
-  /* border colors */
-  --border-white: hsla(0, 0%, 100%, 1);
-  --border-light-gray: hsla(240, 1%, 83%, 1);
-  --border-gainsboro: hsla(220, 13%, 91%, 1);
-  --border-eerie-black: hsla(0, 0%, 13%, 1);
-  --border-smoky-black: hsla(0, 0%, 6%, 1);
-
-  
-
-  /**
-   * TYPOGRAPHY
-   */
-
-  /* font family */
-  --fontFamily-recoleta: "Averia Serif Libre", serif;
-  --fontFamily-roboto: 'Roboto', sans-serif;
-
-  /* font size */
-  --fontSize-1: 4.6rem;
-  --fontSize-2: 4.5rem;
-  --fontSize-3: 4rem;
-  --fontSize-4: 3rem;
-  --fontSize-5: 2.4rem;
-  --fontSize-6: 1.8rem;
-  --fontSize-7: 2rem;
-  --fontSize-8: 1.6rem;
-  --fontSize-9: 1.5rem;
-  --fontSize-10: 1.4rem;
-
-  /* font weight */
+  --weight-light: 300;
   --weight-regular: 400;
   --weight-medium: 500;
 
-  /**
-   * SPACING
-   */
+  --tracking-display: -0.01em;
+  --tracking-label: 0.14em;
 
-  --section-spacing: 70px;
+  /* layout */
+  --gutter: 16px;
+  --header-h: 56px;
+  --section-spacing: 72px;
 
-  /**
-   * BORDER RADIUS
-   */
-
-  --radius-pill: 500px;
-  --radius-circle: 50%;
-
-  /**
-   * TRANSITION
-   */
-
+  /* motion */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --transition-1: 0.25s ease;
   --transition-2: 0.5s ease;
-  --transition-3: 1000ms cubic-bezier(0.03, 0.98, 0.52, 0.99) 0s;
-  --cubic-in: cubic-bezier(0.51, 0.03, 0.64, 0.28);
-  --cubic-out: cubic-bezier(0.05, 0.83, 0.52, 0.97);
-
 }
 
+body.light-theme {
+  --ink: #f2f2ee;
+  --paper: #0a0a0a;
+  --muted: rgba(10, 10, 10, 0.62);
+  --faint: rgba(10, 10, 10, 0.4);
+  --line: rgba(10, 10, 10, 0.14);
+  --line-strong: rgba(10, 10, 10, 0.32);
+  --surface: #e9e9e4;
+  --dot: rgba(10, 10, 10, 0.16);
+  --grain-opacity: 0.05;
+}
 
+/* alias de los nombres anteriores (los usa el preloader) */
+body {
+  --bg-black: var(--ink);
+  --bg-white: var(--paper);
+  --text-white: var(--paper);
+  --text-light-gray: var(--muted);
+  --border-eerie-black: var(--line);
+}
 
+@media (min-width: 640px) {
+  :root {
+    --gutter: 24px;
+    --section-spacing: 96px;
+  }
+}
 
+@media (min-width: 992px) {
+  :root {
+    --gutter: 40px;
+    --header-h: 64px;
+    --section-spacing: 140px;
+  }
+}
 
 /*-----------------------------------*\
   #RESET
@@ -135,6 +113,7 @@ a {
 }
 
 img {
+  max-width: 100%;
   height: auto;
 }
 
@@ -144,6 +123,7 @@ textarea {
   background: none;
   border: none;
   font: inherit;
+  color: inherit;
 }
 
 input,
@@ -165,24 +145,39 @@ address {
 
 html {
   font-size: 10px;
-  scroll-behavior: smooth;
+}
+
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
 }
 
 body {
-  background-color: var(--bg-black);
-  color: var(--text-light-gray);
-  font-family: var(--fontFamily-roboto);
-  font-size: var(--fontSize-8);
-  line-height: 1.75;
-  /* overflow: hidden; */
-}
-
-body.loaded {
-  overflow-y: auto;
+  background-color: var(--ink);
+  color: var(--paper);
+  font-family: var(--fontFamily-sans);
+  font-size: var(--fs-body);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  transition: background-color var(--transition-2), color var(--transition-2);
 }
 
 body.nav-active {
   overflow: hidden;
+}
+
+::selection {
+  background: var(--paper);
+  color: var(--ink);
+}
+
+:focus-visible {
+  outline: 1px solid var(--paper);
+  outline-offset: 3px;
 }
 
 ::-webkit-scrollbar {
@@ -190,77 +185,22 @@ body.nav-active {
 }
 
 ::-webkit-scrollbar-track {
-  border-inline-start: 1px solid var(--border-eerie-black);
+  background: var(--ink);
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: var(--bg-white);
+  background-color: var(--line-strong);
 }
 
-@media (min-width: 575px) {
-  :root {
-
-    /**
-     * TYPOGRAPHY
-     */
-
-    /* font size */
-    --fontSize-1: 5.6rem;
-    --fontSize-5: 3.2rem;
-
-  }
-}
-
-@media (min-width: 768px) {
-  :root {
-
-    /**
-     * TYPOGRAPHY
-     */
-
-    /* font size */
-    --fontSize-1: 6.6rem;
-
-    /**
-     * SPACING
-     */
-
-    --section-spacing: 100px;
-
-  }
-}
-
-@media (min-width: 992px) {
-  /** 
-   * CUSTOM PROPERTY
-   */
-
-  :root {
-
-    /**
-     * TYPOGRAPHY
-     */
-
-    /* font size */
-    --fontSize-2: 7rem;
-
-  }
-}
-
-@media (min-width: 1200px) {
-  :root {
-
-    /**
-     * TYPOGRAPHY
-     */
-
-    /* font size */
-    --fontSize-2: 9rem;
-    --fontSize-4: 4rem;
-    --fontSize-5: 4rem;
-    --fontSize-6: 2rem;
-
-  }
+/* Grano de película sobre toda la página */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  pointer-events: none;
+  opacity: var(--grain-opacity);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
 @media (prefers-reduced-motion: reduce) {

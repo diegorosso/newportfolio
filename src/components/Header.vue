@@ -1,87 +1,73 @@
 <template>
-  <header class="header" :class="{ active: isHeaderActive }">
-    <div class="container">
-      <a href="#" class="logo">
-        <img
-          src="@/assets/images/Diego.png"
-          width="84"
-          height="26"
-          alt="logo"
-        />
+  <header class="header" :class="{ open: isNavActive }">
+    <div class="header-bar wrap">
+      <a href="#home" class="brand label" @click="closeNav">
+        Diego<span class="label-dim">.</span>Rosso
       </a>
 
-      <nav class="navbar" :class="{ active: isNavActive }">
-        <div class="navbar-top">
-          <a href="#" class="logo">
-            <img
-              src="@/assets/images/Diego.png"
-              width="84"
-              height="26"
-              alt="logo"
-            />
-          </a>
-          <button
-            class="nav-close-btn"
-            aria-label="close menu"
-            @click="toggleNav"
-          >
-            <ion-icon name="close-outline" aria-hidden="true"></ion-icon>
-          </button>
-        </div>
-
-        <ul class="navbar-list">
-          <li v-for="(link, index) in links" :key="index">
-            <a :href="link.href" class="navbar-link" @click="closeNav">{{ link.label }}</a>
+      <nav class="nav-desktop" aria-label="Principal">
+        <ul class="nav-list">
+          <li v-for="(link, index) in links" :key="link.href">
+            <a :href="link.href" class="nav-link label">
+              <span class="label-dim">{{ pad(index + 1) }}</span>
+              {{ link.label }}
+            </a>
           </li>
         </ul>
       </nav>
-      <!-- ✅ Botón de descarga funcional -->
-      <div class="header-actions" >
-        <Mode />
-        <a href="/diegoCv.pdf" download class="btn btn:hover">
-          <span class="span">Descargar CV</span>
-          <ion-icon name="arrow-forward" aria-hidden="true"></ion-icon>
-        </a>
-      </div>
-      <button
-        class="nav-open-btn btn:hover"
-        aria-label="open menu"
-        @click="toggleNav"
-      >
-        <span class="line line-1"></span>
-        <span class="line line-2"></span>
-      </button>
 
-      <div
-        class="overlay"
-        :class="{ active: isNavActive }"
-        @click="toggleNav"
-      ></div>
+      <div class="header-actions">
+        <Mode />
+        <a href="/diegoCv.pdf" download class="btn btn--ghost cv-btn">
+          CV <span class="arrow" aria-hidden="true">↓</span>
+        </a>
+        <button
+          class="menu-btn label"
+          :aria-expanded="isNavActive"
+          aria-controls="mobile-menu"
+          @click="toggleNav"
+        >
+          {{ isNavActive ? "Cerrar" : "Menú" }}
+        </button>
+      </div>
+    </div>
+
+    <div id="mobile-menu" class="mobile-menu wrap" :class="{ active: isNavActive }">
+      <ul>
+        <li v-for="(link, index) in links" :key="link.href">
+          <a :href="link.href" class="mobile-link" @click="closeNav">
+            <span class="label label-dim">{{ pad(index + 1) }}</span>
+            <span class="display">{{ link.label }}</span>
+          </a>
+        </li>
+      </ul>
+      <a href="/diegoCv.pdf" download class="btn" @click="closeNav">
+        Descargar CV <span class="arrow" aria-hidden="true">↓</span>
+      </a>
     </div>
   </header>
 </template>
 
 <script>
-import Mode from "../components/Mode.vue";
+import Mode from "./Mode.vue";
+
 export default {
   name: "HeaderComponent",
-  components: {
-    Mode,
-  },
+  components: { Mode },
   data() {
     return {
       isNavActive: false,
-      isHeaderActive: false,
       links: [
-        { label: "Home", href: "#home" },
-        { label: "Servicios", href: "#service" },
         { label: "Sobre mí", href: "#about" },
         { label: "Proyectos", href: "#project" },
-        { label: "Contactos", href: "#contact" },
+        { label: "Contacto", href: "#contact" },
       ],
     };
   },
   methods: {
+    pad(n) {
+      return String(n).padStart(2, "0");
+    },
     toggleNav() {
       this.isNavActive = !this.isNavActive;
       document.body.classList.toggle("nav-active", this.isNavActive);
@@ -90,207 +76,148 @@ export default {
       this.isNavActive = false;
       document.body.classList.remove("nav-active");
     },
-    handleScroll() {
-      this.isHeaderActive = window.scrollY > 0;
+    onKey(event) {
+      if (event.key === "Escape" && this.isNavActive) this.closeNav();
     },
   },
   mounted() {
-    window.addEventListener("scroll", this.handleScroll);
+    window.addEventListener("keydown", this.onKey);
   },
   beforeUnmount() {
-    window.removeEventListener("scroll", this.handleScroll);
+    window.removeEventListener("keydown", this.onKey);
   },
 };
 </script>
 
 <style scoped>
-/* Tu CSS se mantiene igual, no necesita cambios */
-.header .btn {
+.header {
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 40;
+}
+
+.header-bar {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  height: var(--header-h);
+  border-block-end: 1px solid var(--line);
+  background-color: color-mix(in srgb, var(--ink) 82%, transparent);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+
+.brand {
+  display: flex;
+  color: var(--paper);
+}
+
+.nav-desktop {
   display: none;
 }
 
-.header {
+.nav-list {
+  display: flex;
+  gap: 36px;
+}
+
+.nav-link {
+  position: relative;
+  display: flex;
+  gap: 0.6em;
+  color: var(--muted);
+  transition: color var(--transition-1);
+}
+
+.nav-link::after {
+  content: "";
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  background-color: var(--bg-black);
-  padding-block: 20px;
-  z-index: 4;
+  inset: auto 0 -6px 0;
+  height: 1px;
+  background-color: var(--paper);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--transition-1);
 }
 
-.header.active {
-  position: fixed;
-  background-color: var(--bg-jet);
-  padding-block: 10px;
-  animation: slideIn 500ms ease-out forwards;
+.nav-link:is(:hover, :focus-visible) {
+  color: var(--paper);
 }
 
-@keyframes slideIn {
-  0% {
-    opacity: 0;
-    transform: translateY(-100%);
-  }
-
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.header .container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.nav-open-btn {
-  width: 50px;
-  height: 50px;
-  display: grid;
-  place-content: center;
-  gap: 6px;
-}
-
-.nav-open-btn .line {
-  width: 24px;
-  height: 2px;
-  background-color: var(--bg-black);
-  transition: var(--transition-1);
-}
-
-.nav-open-btn:is(:hover, :focus-visible) .line {
-  background-color: var(--bg-white);
-}
-
-.nav-open-btn:is(:hover, :focus-visible) .line-1 {
-  transform: scaleX(0.7);
-}
-
-.navbar {
-  position: fixed;
-  background-color: var(--bg-black);
-  top: 0;
-  left: -300px;
-  width: 100%;
-  max-width: 300px;
-  height: 100vh;
-  padding: 25px 20px;
-  visibility: hidden;
-  transition: 250ms var(--cubic-in);
-  z-index: 3;
-}
-
-.navbar.active {
-  transform: translateX(300px);
-  visibility: visible;
-  transition: 500ms var(--cubic-out);
-}
-
-.navbar-top {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-block-end: 20px;
-  border-block-end: 1px solid var(--border-smoky-black);
-  margin-block-end: 10px;
-}
-
-.nav-close-btn {
-  width: 30px;
-  height: 30px;
-  background-color: var(--bg-smoky-black);
-  color: var(--text-white);
-  font-size: 2rem;
-  display: grid;
-  place-items: center;
-}
-
-.nav-close-btn ion-icon {
-  --ionicon-stroke-width: 50px;
-}
-
-.navbar-link {
-  padding: 8px;
-  margin-block-start: 4px;
-}
-
-.navbar-link:is(:hover, :focus-visible) {
-  color: var(--text-white);
-}
-
-.overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100vh;
-  background-color: var(--bg-black);
-  opacity: 0;
-  pointer-events: none;
-  z-index: 2;
-  transition: var(--transition-1);
-}
-
-.overlay.active {
-  opacity: 0.5;
-  pointer-events: all;
+.nav-link:is(:hover, :focus-visible)::after {
+  transform: scaleX(1);
 }
 
 .header-actions {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 10px;
 }
 
-.header-actions .btn {
+.cv-btn {
+  display: none;
+  height: 32px;
+  padding-inline: 12px;
+}
+
+.menu-btn {
+  height: 32px;
+  padding-inline: 12px;
+  border: 1px solid var(--line-strong);
+  color: var(--paper);
+}
+
+.mobile-menu {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
   display: flex;
-  align-items: center;
-  gap: 0.5rem;
+  flex-direction: column;
+  justify-content: space-between;
+  padding-block: calc(var(--header-h) + 32px) 32px;
+  background-color: var(--ink);
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.35s var(--ease-out), visibility 0.35s;
+}
+
+.mobile-menu.active {
+  visibility: visible;
+  opacity: 1;
+}
+
+.mobile-link {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  padding-block: 14px;
+  border-block-end: 1px solid var(--line);
+}
+
+.mobile-link .display {
+  font-size: clamp(5.6rem, 16vw, 9.6rem);
+}
+
+@media (min-width: 640px) {
+  .cv-btn {
+    display: inline-flex;
+  }
 }
 
 @media (min-width: 992px) {
-  .header .container {
-    margin-inline: 0;
-    min-width: 100%;
-  }
-
-  .nav-open-btn,
-  .navbar-top {
-    display: none;
-  }
-
-  .navbar {
-    all: unset;
+  .nav-desktop {
     display: block;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
   }
 
-  .navbar-list {
-    display: flex;
-    gap: 16px;
-  }
-
-  .header .btn {
-    display: flex;
-  }
-}
-@media (min-width: 1200px) {
-  .header {
-    padding-block: 40px;
-  }
-
-  .header .container {
-    padding-inline: 60px;
-  }
-
-  .navbar-list {
-    gap: 50px;
-  }
-}
-
-@media (min-width: 1400px) {
-  .header {
-    padding-inline: 90px;
+  .menu-btn,
+  .mobile-menu {
+    display: none;
   }
 }
 </style>

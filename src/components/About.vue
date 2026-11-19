@@ -1,125 +1,95 @@
 <template>
-  <section class="section about" aria-label="about-me" id="about">
-    <div class="container">
-      <div class="tab-container">
-        <ul class="tab-btn-list">
-          <li class="tab-btn-item">
-            <button class="tab-btn title h6 active" data-tab-btn="about">
-              Sobre mí
-            </button>
-          </li>
+  <section class="section about" aria-label="Sobre mí" id="about">
+    <div class="wrap">
+      <SectionHead
+        :index="1"
+        :total="3"
+        label="Sobre mí"
+        title="Creatividad en código y diseño"
+      />
 
-          <li class="tab-btn-item">
-            <button class="tab-btn title h6" data-tab-btn="skillset">
-              Tecnologías
-            </button>
-          </li>
+      <div class="about-grid">
+        <div class="about-text">
+          <p class="lead" data-reveal>
+            Explorando la intersección entre el desarrollo web y el diseño
+            multimedia para crear proyectos innovadores y funcionales.
+          </p>
+          <p class="muted" data-reveal>
+            Desarrollador web con experiencia en interfaces de usuario y diseño.
+            Trabajo con Vue, JavaScript, Node.js y Firebase; diseño en Figma y
+            Photoshop; y uso IA (Claude, Groq) para prototipar y construir
+            productos reales.
+          </p>
+        </div>
 
-          <li class="tab-btn-item">
-            <button class="tab-btn title h6" data-tab-btn="interview">
-              Experiencia
-            </button>
-          </li>
-
-          <li class="tab-btn-item">
-            <button class="tab-btn title h6" data-tab-btn="awward">
-              Diseños
-            </button>
-          </li>
-        </ul>
-
-        <div class="tab-content active" data-tab-content="about">
-          <div class="grid-list">
-            <figure
-              class="about-banner img-holder"
-              style="--width: 300px; --height: 400px; border-radius: 5rem;" 
-              data-tilt
-            >
-              <img
-                src="../assets/images/gif1.gif"
-                width="570"
-                height="420"
-                loading="lazy"
-                alt="about banner"
-                class="img-cover"
-              />
-            </figure>
-
-            <div class="about-content">
-              <h2 class="h4 title section-title">
-                Creatividad en Código y Diseño
-              </h2>
-
-              <p class="section-text">
-                Explorando la intersección entre el desarrollo web y el diseño
-                multimedia para crear proyectos innovadores y funcionales.
-              </p>
-
-              <ul class="about-list">
-                <li class="about-item">
-                  <p class="list-title">Name</p>
-
-                  <span class="span title h5">Diego Rosso</span>
-                </li>
-
-                <li class="about-item">
-                  <p class="list-title">Teléfono</p>
-
-                  <a
-                    class="span title h5"
-                    href="https://wa.me/541131453388"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    >11 3145 3388</a
-                  >
-                </li>
-
-                <li class="about-item">
-                  <p class="list-title">Email</p>
-
-                  <a
-                    href="mailto:diegorosso1988@gmail.com"
-                    class="span title h5 email-truncate"
-                    title="diegorosso1988@gmail.com"
-                    >diegorosso1988@gmail.com</a
-                  >
-                </li>
-
-                <li class="about-item">
-                  <p class="list-title">Social Network</p>
-
-                  <div class="social-list">
-                    <a
-                      href="https://www.linkedin.com/in/diegorosso1988/"
-                      target="_blank"
-                      class="social-link h6"
-                      title="Linkedin"
-                      >Ln.</a
-                    >
-                    <a
-                      href="https://github.com/diegorosso"
-                      target="_blank"
-                      class="social-link h6"
-                      title="Git"
-                      >Git.</a
-                    >
-                  </div>
-                </li>
-              </ul>
+        <aside class="profile" data-reveal>
+          <p class="label label-dim profile-title">Perfil</p>
+          <dl class="profile-list">
+            <div v-for="row in profile" :key="row.key" class="profile-row">
+              <dt class="label label-dim">{{ row.key }}</dt>
+              <dd class="label">
+                <a
+                  v-if="row.href"
+                  :href="row.href"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="profile-link"
+                  >{{ row.value }}</a
+                >
+                <template v-else>{{ row.value }}</template>
+              </dd>
             </div>
+          </dl>
+          <div class="profile-actions">
+            <a href="/diegoCv.pdf" download class="btn">
+              Descargar CV <span class="arrow" aria-hidden="true">↓</span>
+            </a>
+            <a
+              href="https://github.com/diegorosso"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="btn btn--ghost"
+            >
+              GitHub <span class="arrow" aria-hidden="true">↗</span>
+            </a>
           </div>
+        </aside>
+      </div>
+
+      <div class="about-tabs">
+        <div class="tab-list" role="tablist" aria-label="Más sobre mí">
+          <button
+            v-for="(tab, index) in tabs"
+            :key="tab.id"
+            :id="`tab-${tab.id}`"
+            type="button"
+            role="tab"
+            class="tab-btn label"
+            :class="{ active: activeTab === tab.id }"
+            :aria-selected="activeTab === tab.id"
+            :aria-controls="`panel-${tab.id}`"
+            :tabindex="activeTab === tab.id ? 0 : -1"
+            @click="activeTab = tab.id"
+            @keydown.right.prevent="moveTab(1)"
+            @keydown.left.prevent="moveTab(-1)"
+          >
+            <span class="label-dim">{{ String(index + 1).padStart(2, "0") }}</span>
+            {{ tab.label }}
+          </button>
         </div>
 
-        <div class="tab-content" data-tab-content="skillset">
-          <Skills />
-        </div>
-
-        <div class="tab-content" data-tab-content="interview">
-          <Experience />
-        </div>
-
-        <div class="tab-content" data-tab-content="awward">
-          <flyers />
+        <div
+          v-for="tab in tabs"
+          v-show="activeTab === tab.id"
+          :key="tab.id"
+          :id="`panel-${tab.id}`"
+          role="tabpanel"
+          :aria-labelledby="`tab-${tab.id}`"
+          class="tab-panel"
+        >
+          <Skills v-if="tab.id === 'skills'" />
+          <Experience v-else-if="tab.id === 'experience'" />
+          <Flyers v-else />
         </div>
       </div>
     </div>
@@ -127,253 +97,170 @@
 </template>
 
 <script setup>
+import { ref, nextTick } from "vue";
+import SectionHead from "./SectionHead.vue";
 import Skills from "./Skills.vue";
 import Experience from "./Experience.vue";
-import flyers from "./flyers.vue";
+import Flyers from "./flyers.vue";
 
-document.addEventListener("DOMContentLoaded", () => {
+const tabs = [
+  { id: "skills", label: "Tecnologías" },
+  { id: "experience", label: "Experiencia" },
+  { id: "designs", label: "Diseños" },
+];
 
-  const tabButtons = document.querySelectorAll(".tab-btn");
-  const tabContents = document.querySelectorAll(".tab-content");
+const activeTab = ref("skills");
 
-  tabButtons.forEach((button) => {
-    button.addEventListener("click", () => {
-      const targetTab = button.getAttribute("data-tab-btn");
+const moveTab = async (step) => {
+  const index = tabs.findIndex((tab) => tab.id === activeTab.value);
+  const next = tabs[(index + step + tabs.length) % tabs.length];
+  activeTab.value = next.id;
+  await nextTick();
+  document.getElementById(`tab-${next.id}`)?.focus();
+};
 
-      const activeContent = document.querySelector(".tab-content.active");
-      if (activeContent) {
-      }
-
-      // Remover clase activa de todos los botones y contenidos
-      tabButtons.forEach((btn) => btn.classList.remove("active"));
-      tabContents.forEach((content) => content.classList.remove("active"));
-
-      // Agregar clase activa al botón clickeado
-      button.classList.add("active");
-
-      // Buscar y activar el contenido correspondiente
-      const targetContent = document.querySelector(
-        `.tab-content[data-tab-content="${targetTab}"]`
-      );
-      if (targetContent) {
-        targetContent.classList.add("active");
-      } else {
-        console.error(`No se encontró contenido para la pestaña: ${targetTab}`);
-      }
-    });
-  });
-});
+const profile = [
+  { key: "Nombre", value: "Diego Rosso" },
+  { key: "Base", value: "San Isidro, AR" },
+  { key: "Rol", value: "Desarrollador web" },
+  { key: "Teléfono", value: "11 3145 3388", href: "https://wa.me/541131453388" },
+  {
+    key: "Email",
+    value: "diegorosso1988@gmail.com",
+    href: "mailto:diegorosso1988@gmail.com",
+  },
+  {
+    key: "LinkedIn",
+    value: "in/diegorosso1988",
+    href: "https://www.linkedin.com/in/diegorosso1988/",
+  },
+];
 </script>
 
 <style scoped>
-.tab-container {
-  border: 1px solid var(--border-eerie-black);
+.about-grid {
+  display: grid;
+  gap: 48px;
+}
+
+.about-text {
+  display: grid;
+  gap: 24px;
+  align-content: start;
+  max-width: 62ch;
+}
+
+.profile {
+  display: grid;
+  gap: 18px;
+  align-content: start;
+  padding: 20px;
+  border: 1px solid var(--line);
+}
+
+.profile-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding-block: 10px;
+  border-block-start: 1px solid var(--line);
+}
+
+.profile-row dd {
+  text-align: right;
+  overflow-wrap: anywhere;
+}
+
+.profile-link {
+  display: inline;
+  background-image: linear-gradient(var(--paper), var(--paper));
+  background-repeat: no-repeat;
+  background-position: left bottom;
+  background-size: 0 1px;
+  transition: background-size var(--transition-1);
+}
+
+.profile-link:is(:hover, :focus-visible) {
+  background-size: 100% 1px;
+}
+
+.profile-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* Pestañas */
+.about-tabs {
+  margin-block-start: 96px;
+}
+
+.tab-list {
+  display: flex;
+  border-block-end: 1px solid var(--line);
+  overflow-x: auto;
 }
 
 .tab-btn {
-  width: 100%;
-  padding-block: 16px;
-  border-block-end: 1px solid var(--border-eerie-black);
-  transition: var(--transition-1);
+  position: relative;
+  display: flex;
+  gap: 0.6em;
+  flex-shrink: 0;
+  padding: 14px 18px 14px 0;
+  margin-inline-end: 18px;
+  color: var(--muted);
+  transition: color var(--transition-1);
 }
 
-.tab-btn:is(:hover, :focus-visible, .active) {
-  background: var(--bg-eerie-black);
+.tab-btn::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 -1px 0;
+  height: 1px;
+  background-color: var(--paper);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s var(--ease-out);
 }
 
-.tab-content {
-  display: none;
-  padding: 30px;
+.tab-btn:is(:hover, :focus-visible) {
+  color: var(--paper);
 }
 
-.tab-content.active {
-  display: block;
-  animation: fade 500ms linear forwards;
+.tab-btn.active {
+  color: var(--paper);
+}
+
+.tab-btn.active::after {
+  transform: scaleX(1);
+}
+
+.tab-panel {
+  padding-block-start: 32px;
+  animation: fade 0.5s var(--ease-out);
 }
 
 @keyframes fade {
-  0% {
+  from {
     opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
-}
-
-.tab-content .grid-list {
-  display: grid;
-  gap: 30px;
-}
-
-.tab-content .section-title {
-  margin-block-end: 30px;
-}
-
-.tab-content .section-text,
-.about-item:not(:last-child) {
-  margin-block-end: 20px;
-}
-
-.about-item .span {
-  line-height: 1.4;
-}
-
-.social-list {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  justify-content: start;
-}
-
-.social-link {
-  color: var(--text-white);
-}
-
-.skill-wrapper {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-block: 30px 12px;
-}
-
-.skill-wrapper .span {
-  font-family: var(--fontFamily-recoleta);
-  font-weight: var(--weight-medium);
-}
-
-.progress-bar {
-  background-color: var(--bg-smoky-black);
-  height: 4px;
-}
-
-.progress-fill {
-  background-color: var(--bg-white);
-  height: 100%;
-}
-
-.interview-card {
-  position: relative;
-}
-
-.interview-card .btn {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 60px;
-  height: 60px;
-  justify-content: center;
-  border-radius: var(--radius-circle);
-  color: var(--text-smoky-black);
-}
-
-.interview-card .btn::before,
-.interview-card .btn::after {
-  border-radius: inherit;
-}
-
-.interview-card .btn::before {
-  background-color: var(--bg-white);
-}
-
-.interview-card .btn:is(:hover, :focus-visible) {
-  color: var(--text-white);
-}
-
-.exhibition-card {
-  position: relative;
-}
-
-.exhibition-card .card-icon {
-  position: absolute;
-  top: 30px;
-  right: 30px;
-  background-color: var(--bg-white);
-  width: 40px;
-  height: 40px;
-  border-radius: var(--radius-circle);
-  color: var(--bg-smoky-black);
-  display: grid;
-  place-items: center;
-}
-
-.email-truncate {
-  display: inline-block;
-  max-width: 180px; /* Ajustá según lo que necesites */
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  vertical-align: bottom;
-  cursor: pointer;
-}
-
-@media (min-width: 575px) {
-  .tab-btn-list {
-    display: flex;
-    flex-wrap: wrap;
-  }
-
-  .tab-btn-item {
-    width: 50%;
-    flex-grow: 1;
-  }
-
-  .tab-btn-item:nth-child(2n) {
-    border-inline-start: 1px solid var(--border-eerie-black);
-  }
-
-  .tab-content {
-    padding: 40px;
-  }
-
-  .about-list {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-  }
-
-  .interview-card {
-    max-width: max-content;
-    margin-inline: auto;
-  }
-}
-
-@media (min-width: 768px) {
-  .tab-btn-item {
-    width: 20%;
-  }
-
-  .tab-btn-item:not(:first-child) {
-    border-inline-start: 1px solid var(--border-eerie-black);
-  }
-
-  :is([data-tab-content="interview"], [data-tab-content="exhibition"])
-    .grid-list {
-    grid-template-columns: 1fr 1fr;
+    transform: translateY(8px);
   }
 }
 
 @media (min-width: 992px) {
-  .tab-content .grid-list {
-    grid-template-columns: 1fr 1fr;
+  .about-grid {
+    grid-template-columns: 1.4fr 1fr;
+    gap: 80px;
   }
 
-  :is(
-      [data-tab-content="interview"],
-      [data-tab-content="exhibition"],
-      [data-tab-content="awward"]
-    )
-    .grid-list {
-    grid-template-columns: repeat(3, 1fr);
+  .about-tabs {
+    margin-block-start: 140px;
   }
 }
 
-@media (min-width: 1200px) {
-  .tab-content {
-    padding: 60px;
-  }
-
-  .tab-content .grid-list {
-    gap: 50px;
+@media (min-width: 1400px) {
+  .about-grid {
+    grid-template-columns: 1.6fr 1fr;
   }
 }
 </style>

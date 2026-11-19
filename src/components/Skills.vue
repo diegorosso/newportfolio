@@ -1,47 +1,14 @@
 <template>
-  <div
-    class="carousel-container"
-    @mouseover="pauseAutoPlay"
-    @mouseleave="startAutoPlay"
-    @focusin="pauseAutoPlay"
-    @focusout="startAutoPlay"
-  >
-    <button @click="prevSlide" class="carousel-btn left" aria-label="Tecnología anterior">&#10094;</button>
-
-    <div class="carousel-wrapper">
-      <div class="carousel">
-        <div
-          class="carousel-item"
-          v-for="(tech, index) in technologies"
-          :key="index"
-          :class="{ active: index === currentIndex }"
-        >
-          <div class="carousel-text">
-            <h3 class="h4 title section-title">{{ tech.name }}</h3>
-            <p class="section-text">{{ tech.description }}</p>
-          </div>
-          <div>
-            <img :src="tech.img" :alt="tech.name" />
-          </div>
-        </div>
+  <ul class="skills">
+    <li v-for="(tech, index) in technologies" :key="tech.name" class="skill">
+      <div class="skill-top">
+        <span class="label label-dim">{{ String(index + 1).padStart(2, "0") }}</span>
+        <img :src="tech.img" alt="" width="28" height="28" loading="lazy" class="skill-icon" />
       </div>
-    </div>
-
-    <button @click="nextSlide" class="carousel-btn right" aria-label="Tecnología siguiente">&#10095;</button>
-
-    <!-- Dots de navegación -->
-    <div class="dots">
-      <button
-        v-for="(tech, index) in technologies"
-        :key="index"
-        type="button"
-        class="dot"
-        :class="{ active: index === currentIndex }"
-        :aria-label="`Ir a ${tech.name}`"
-        @click="goToSlide(index)"
-      ></button>
-    </div>
-  </div>
+      <h3 class="skill-name">{{ tech.name }}</h3>
+      <p class="skill-text muted">{{ tech.description }}</p>
+    </li>
+  </ul>
 </template>
 
 <script>
@@ -69,8 +36,6 @@ import GroqIcon from "../assets/images/groq-icon.png";
 export default {
   data() {
     return {
-      currentIndex: 0,
-      autoplayInterval: null,
       technologies: [
         {
           name: "HTML",
@@ -195,148 +160,79 @@ export default {
       ],
     };
   },
-  methods: {
-    nextSlide() {
-      this.currentIndex = (this.currentIndex + 1) % this.technologies.length;
-    },
-    prevSlide() {
-      this.currentIndex =
-        (this.currentIndex - 1 + this.technologies.length) %
-        this.technologies.length;
-    },
-    goToSlide(index) {
-      this.currentIndex = index;
-    },
-    startAutoPlay() {
-      clearInterval(this.autoplayInterval);
-      if (this.prefersReducedMotion) return;
-      this.autoplayInterval = setInterval(this.nextSlide, 2000);
-    },
-    pauseAutoPlay() {
-      clearInterval(this.autoplayInterval);
-    },
-  },
-  mounted() {
-    this.prefersReducedMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)"
-    ).matches;
-    this.startAutoPlay();
-  },
-  beforeUnmount() {
-    this.pauseAutoPlay();
-  },
 };
 </script>
 
 <style scoped>
-.carousel-container {
-  position: relative;
-  width: 100%;
-  overflow: hidden;
-  margin: auto;
+/* Celdas separadas por líneas de 1px: el fondo de la grilla hace de línea */
+.skills {
+  display: grid;
+  gap: 1px;
+  background-color: var(--line);
+  border: 1px solid var(--line);
 }
 
-.carousel-wrapper {
-  overflow: hidden;
+.skill {
+  display: grid;
+  align-content: start;
+  gap: 12px;
+  padding: 20px;
+  background-color: var(--ink);
+  transition: background-color var(--transition-1);
 }
 
-.carousel {
+.skill:hover {
+  background-color: var(--surface);
+}
+
+.skill-top {
   display: flex;
-  flex-wrap: nowrap;
-}
-
-.carousel-item {
-  display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: center;
-  opacity: 0;
-  transform: scale(0.9);
-  transition: opacity 0.8s ease-in-out, transform 0.5s ease-in-out;
-  position: absolute;
-  width: 100%;
 }
 
-.carousel-item.active {
+.skill-icon {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+  filter: grayscale(1);
+  opacity: 0.7;
+  transition: filter var(--transition-1), opacity var(--transition-1);
+}
+
+.skill:hover .skill-icon {
+  filter: none;
   opacity: 1;
-  transform: scale(1);
-  position: relative;
 }
 
-.carousel-item img {
-  max-width: 100px;
-  height: auto;
-  margin-top: 10px;
-  transition: transform 0.3s ease-in-out, filter 0.3s ease-in-out;
-  cursor: pointer;
-  animation: glow 2s ease-in-out infinite alternate;
+.skill-name {
+  font-family: var(--fontFamily-display);
+  font-weight: var(--weight-regular);
+  font-size: 3.2rem;
+  line-height: 1;
+  text-transform: uppercase;
 }
 
-.carousel-item img:hover {
-  transform: scale(1.1);
+.skill-text {
+  font-size: var(--fs-small);
+  line-height: 1.55;
 }
 
-@keyframes glow {
-  from {
-    filter: drop-shadow(0 0 0 rgba(255, 255, 255, 0));
-  }
-  to {
-    filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.6));
+@media (min-width: 640px) {
+  .skills {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
-.carousel-text {
-  display: flex;
-  flex-direction: column;
-  align-items: start;
-  width: 50%;
+@media (min-width: 992px) {
+  .skills {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }
 
-.carousel-btn {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  background: rgba(0, 0, 0, 0.5);
-  color: white;
-  border: none;
-  padding: 10px;
-  cursor: pointer;
-  z-index: 10;
-}
-
-.carousel-btn.left {
-  left: 10px;
-}
-
-.carousel-btn.right {
-  right: 10px;
-}
-
-/* Dots de navegación */
-.dots {
-  display: flex;
-  justify-content: center;
-  margin-top: 10rem;
-}
-
-.dots .dot {
-  width: 12px;
-  height: 12px;
-  margin: 5px;
-  padding: 0;
-  background-color: #ccc;
-  border-radius: 50%;
-  display: inline-block;
-  cursor: pointer;
-  transition: background 0.3s;
-}
-
-.dots .dot.active {
-  background-color: #000;
-}
-
-.dots .dot:focus-visible,
-.carousel-btn:focus-visible {
-  outline: 2px solid #fff;
-  outline-offset: 2px;
+@media (min-width: 1400px) {
+  .skills {
+    grid-template-columns: repeat(4, 1fr);
+  }
 }
 </style>

@@ -1,75 +1,70 @@
 <template>
-  <button class="theme-switch" @click="toggleTheme" :class="{ light: isLight }">
-    <div class="switch-thumb">
-      <img :src="isLight ? light : dark" alt="theme icon" />
-    </div>
-  </button>
+  <div class="theme-switch label" role="group" aria-label="Tema de color">
+    <button
+      type="button"
+      :class="{ active: !isLight }"
+      :aria-pressed="!isLight"
+      @click="isLight = false"
+    >
+      Osc
+    </button>
+    <button
+      type="button"
+      :class="{ active: isLight }"
+      :aria-pressed="isLight"
+      @click="isLight = true"
+    >
+      Clr
+    </button>
+  </div>
 </template>
 
 <script setup>
-import dark from '../assets/images/dark.png'
-import light from '../assets/images/light.png'
-import { onMounted, computed } from 'vue'
-import { globalState } from '../globalState' // <-- Ruta relativa a donde tengas el archivo
+import { onMounted, computed } from "vue";
+import { globalState } from "../globalState";
 
 const isLight = computed({
   get: () => !globalState.isDarkMode,
   set: (val) => {
-    globalState.isDarkMode = !val
-    document.body.classList.toggle('light-theme', val)
-    localStorage.setItem('theme', val ? 'light' : 'dark')
-  }
-})
-
-const toggleTheme = () => {
-  isLight.value = !isLight.value
-}
+    globalState.isDarkMode = !val;
+    document.body.classList.toggle("light-theme", val);
+    try {
+      localStorage.setItem("theme", val ? "light" : "dark");
+    } catch {
+      /* sin almacenamiento disponible: el tema solo dura esta visita */
+    }
+  },
+});
 
 onMounted(() => {
-  const savedTheme = localStorage.getItem('theme')
-  if (savedTheme === 'light') {
-    isLight.value = true
+  let savedTheme = null;
+  try {
+    savedTheme = localStorage.getItem("theme");
+  } catch {
+    savedTheme = null;
   }
-})
+  if (savedTheme === "light") isLight.value = true;
+});
 </script>
 
 <style scoped>
 .theme-switch {
-  width: 48px;
-  height: 26px;
-  background-color: #444;
-  border-radius: 999px;
-  border: none;
-  cursor: pointer;
-  padding: 3px;
   display: flex;
-  align-items: center;
-  transition: background-color 0.3s ease;
-  position: relative;
+  height: 32px;
+  border: 1px solid var(--line-strong);
 }
 
-.theme-switch.light {
-  background-color: #ccc;
+.theme-switch button {
+  padding-inline: 9px;
+  font-size: 1rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--faint);
+  transition: background-color var(--transition-1), color var(--transition-1);
 }
 
-.switch-thumb {
-  width: 20px;
-  height: 20px;
-  background-color: white;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: transform 0.3s ease;
-  transform: translateX(0);
-}
-
-.theme-switch.light .switch-thumb {
-  transform: translateX(22px);
-}
-
-.switch-thumb img {
-  width: 14px;
-  height: 14px;
+.theme-switch button.active {
+  background-color: var(--paper);
+  color: var(--ink);
 }
 </style>

@@ -1,177 +1,165 @@
 @import './base.css';
 
+/*-----------------------------------*\
+  #LAYOUT
+\*-----------------------------------*/
 
-.container {
-  padding-inline: 16px;
-}
-
-.btn\:hover {
-  position: relative;
-  z-index: 1;
-}
-
-.btn\:hover::before,
-.btn\:hover::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
+.wrap {
   width: 100%;
-  height: 100%;
-  z-index: -1;
-  transition: var(--transition-1);
-  will-change: transform;
-  pointer-events: none;
-}
-
-.btn\:hover::after {
-  border: 1px solid var(--bg-white);
-  transform: scale(1.2);
-  opacity: 0;
-}
-
-.btn\:hover:is(:hover, :focus-visible)::before {
-  transform: scale(0.5);
-  opacity: 0;
-}
-
-.btn\:hover:is(:hover, :focus-visible)::after {
-  transform: scale(1);
-  opacity: 1;
-}
-
-.text-center {
-  text-align: center;
-}
-
-.has-before,
-.has-after {
-  position: relative;
-  z-index: 1;
-}
-
-.has-before::before,
-.has-after::after {
-  content: "";
-  position: absolute;
-}
-
-.img-holder {
-  aspect-ratio: var(--width) / var(--height);
-  overflow: hidden;
-  background-color: var(--bg-jet);
-}
-
-.img-cover {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-[data-tilt] {
-  transition: var(--transition-3);
-}
-
-.title {
-  color: var(--text-white);
-  font-family: var(--fontFamily-recoleta);
-  font-weight: var(--weight-regular);
-}
-
-.h1 {
-  font-size: var(--fontSize-2);
-  line-height: 1.2;
-}
-
-.h2,
-.h3,
-.h4,
-.h5 {
-  line-height: 1.3;
-}
-
-.h2 {
-  font-size: var(--fontSize-3);
-}
-
-.h3 {
-  font-size: var(--fontSize-4);
-}
-
-.h4 {
-  font-size: var(--fontSize-5);
-}
-
-.h5 {
-  font-size: var(--fontSize-7);
-}
-
-.h6 {
-  font-size: var(--fontSize-6);
-}
-
-.btn {
-  color: var(--text-white);
-  font-size: var(--fontSize-9);
-  font-weight: var(--weight-medium);
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  max-width: max-content;
-  height: 56px;
-  padding-inline: 30px;
-}
-
-.btn::before {
-  background-color: var(--bg-smoky-black);
-}
-
-.btn ion-icon {
-  font-size: 1.8rem;
-  --ionicon-stroke-width: 50px;
+  padding-inline: var(--gutter);
 }
 
 .section {
+  position: relative;
   padding-block: var(--section-spacing);
-  overflow-x: hidden;
+  border-block-start: 1px solid var(--line);
+  scroll-margin-top: var(--header-h);
 }
 
-@media (min-width: 575px) {
-  .container {
-    max-width: 540px;
-    width: 100%;
-    margin-inline: auto;
-  }
+/* Grilla de puntos de fondo */
+.dot-grid {
+  background-image: radial-gradient(var(--dot) 1px, transparent 1.2px);
+  background-size: 22px 22px;
 }
 
-@media (min-width: 768px) {
-  .container {
-    max-width: 720px;
-  }
+/*-----------------------------------*\
+  #TYPOGRAPHY
+\*-----------------------------------*/
+
+/* Etiquetas: mono chica, en mayúsculas y con aire */
+.label {
+  font-family: var(--fontFamily-mono);
+  font-size: var(--fs-label);
+  font-weight: var(--weight-regular);
+  line-height: 1.5;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-label);
 }
 
-@media (min-width: 992px) {
-  .container {
-    max-width: 960px;
-  }
+.label-dim {
+  color: var(--faint);
 }
 
-@media (min-width: 1200px) {
-
-  .container,
-  .service .container {
-    max-width: 1200px;
-  }
-
-  .h1 {
-    line-height: 1.1;
-  }
+.muted {
+  color: var(--muted);
 }
 
-@media (min-width: 1400px) {
+/* Títulos: display condensada, fina, en mayúsculas y apretada */
+.display {
+  font-family: var(--fontFamily-display);
+  font-weight: var(--weight-light);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-display);
+  line-height: 0.86;
+}
 
-  .container,
-  .service .container {
-    max-width: 1320px;
-  }
+.h1 {
+  font-size: var(--fs-h1);
+}
+
+.h2 {
+  font-size: var(--fs-h2);
+}
+
+.h3 {
+  font-family: var(--fontFamily-display);
+  font-weight: var(--weight-regular);
+  font-size: var(--fs-h3);
+  line-height: 0.95;
+}
+
+.lead {
+  font-family: var(--fontFamily-display);
+  font-weight: var(--weight-regular);
+  font-size: var(--fs-lead);
+  line-height: 1.12;
+}
+
+/* SplitText envuelve cada línea en una máscara que recorta las letras mientras entran.
+   El aire extra arriba evita que corte tildes y la Ñ (el interlineado es muy cerrado). */
+[data-split] > div {
+  padding-block: 0.14em 0.04em;
+  margin-block: -0.14em -0.04em;
+}
+
+/*-----------------------------------*\
+  #COMPONENTS
+\*-----------------------------------*/
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  height: 44px;
+  padding-inline: 18px;
+  border: 1px solid var(--paper);
+  background-color: var(--paper);
+  color: var(--ink);
+  font-family: var(--fontFamily-mono);
+  font-size: var(--fs-label);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  white-space: nowrap;
+  transition: background-color var(--transition-1), color var(--transition-1),
+    border-color var(--transition-1);
+}
+
+.btn .arrow {
+  transition: transform var(--transition-1);
+}
+
+.btn:is(:hover, :focus-visible) .arrow {
+  transform: translateX(3px);
+}
+
+.btn:is(:hover, :focus-visible) {
+  background-color: transparent;
+  color: var(--paper);
+}
+
+.btn--ghost {
+  background-color: transparent;
+  color: var(--paper);
+  border-color: var(--line-strong);
+}
+
+.btn--ghost:is(:hover, :focus-visible) {
+  border-color: var(--paper);
+}
+
+.chip {
+  display: inline-block;
+  padding: 3px 8px;
+  border: 1px solid var(--line-strong);
+  font-family: var(--fontFamily-mono);
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+}
+
+/* Imagen en semitono: gris, contrastada y vista a través de una trama de puntos */
+.halftone {
+  filter: grayscale(1) contrast(1.35) brightness(1.1);
+  -webkit-mask-image: radial-gradient(circle, #000 1.15px, transparent 1.55px);
+  mask-image: radial-gradient(circle, #000 1.15px, transparent 1.55px);
+  -webkit-mask-size: 4px 4px;
+  mask-size: 4px 4px;
+}
+
+body.light-theme .halftone {
+  filter: grayscale(1) contrast(1.35) invert(1);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
