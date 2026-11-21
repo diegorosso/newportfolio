@@ -1,5 +1,14 @@
 <template>
   <section class="section contact" aria-label="Contacto" id="contact">
+    <!-- Nudo toroidal hecho en Unreal, pasado por el shader de trama: detrás del contenido,
+         reacciona al cursor igual que el organismo del hero -->
+    <div class="knot-field" aria-hidden="true">
+      <DitherImage :src="knotPoster" :video="knotVideo" anchor=".knot-anchor" :show-grid="false" calm @ready="knotReady = true" />
+    </div>
+    <div class="knot-anchor" aria-hidden="true">
+      <img v-if="!knotReady" :src="knotPoster" alt="" class="knot-fallback halftone" />
+    </div>
+
     <div class="wrap contact-grid">
       <!-- Izquierda: mail grande, texto, datos y redes -->
       <div class="contact-main">
@@ -118,11 +127,11 @@
         </label>
 
         <div class="form-foot">
-          <button type="submit" class="btn" :disabled="status === 'sending'">
+          <span class="label label-dim form-count">{{ form.message.length }} / {{ MAX_MESSAGE }} caracteres</span>
+          <button type="submit" class="btn form-submit" :disabled="status === 'sending'">
             {{ status === "sending" ? "Enviando…" : "Enviar mensaje" }}
             <span class="arrow" aria-hidden="true">→</span>
           </button>
-          <span class="label label-dim">{{ form.message.length }} / {{ MAX_MESSAGE }}</span>
         </div>
 
         <p class="form-status label" :class="status" role="status" aria-live="polite">
@@ -142,6 +151,16 @@
 <script setup>
 import { computed, reactive, ref } from "vue";
 import SectionHead from "./SectionHead.vue";
+import DitherImage from "./DitherImage.vue";
+import knotPoster from "../assets/images/nudo.webp";
+import knotWebm from "../assets/videos/nudo.webm";
+import knotMp4 from "../assets/videos/nudo.mp4";
+
+const knotReady = ref(false);
+const knotVideo = [
+  { src: knotWebm, type: 'video/webm; codecs="vp9"' },
+  { src: knotMp4, type: 'video/mp4; codecs="avc1.64001F"' },
+];
 
 const EMAIL = "diegorosso1988@gmail.com";
 const MAX_MESSAGE = 1000;
@@ -223,7 +242,49 @@ const icons = {
 </script>
 
 <style scoped>
+/* El nudo ocupa toda la sección, por detrás del contenido */
+.contact {
+  position: relative;
+  overflow: hidden;
+}
+
+/* Campo WebGL de toda la sección (por detrás) y caja donde va el nudo, arriba a la derecha:
+   asoma por encima del formulario */
+.knot-field {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.knot-anchor {
+  position: absolute;
+  top: -18%;
+  right: -8%;
+  width: min(74vw, 1040px);
+  aspect-ratio: 1 / 1;
+  pointer-events: none;
+  --org-alpha: 1;
+}
+
+.knot-fallback {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+@media (max-width: 767px) {
+  .knot-anchor {
+    top: 0;
+    right: 50%;
+    width: 110vw;
+    transform: translateX(50%);
+    --org-alpha: 0.45;
+    opacity: 0.45;
+  }
+}
+
 .contact-grid {
+  position: relative;
   display: grid;
   gap: 56px;
 }
@@ -351,7 +412,7 @@ a.row-value:is(:hover, :focus-visible) .row-arrow {
   align-content: start;
   padding: 28px;
   border: 1px solid var(--line);
-  background-color: color-mix(in srgb, var(--ink) 92%, transparent);
+  background-color: color-mix(in srgb, var(--ink) 94%, transparent);
 }
 
 .contact-form::before,
@@ -470,7 +531,7 @@ a.row-value:is(:hover, :focus-visible) .row-arrow {
 
 textarea.field-input {
   resize: none;
-  min-height: 150px;
+  min-height: 230px;
 }
 
 /* En celulares la etiqueta ocupa menos, así el mail entra en una línea */
@@ -486,22 +547,37 @@ textarea.field-input {
 }
 
 .form-foot {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
+  display: grid;
+  gap: 16px;
+}
+
+.form-count {
+  justify-self: end;
+}
+
+/* El botón ocupa todo el ancho del formulario, como en la referencia */
+.form-submit {
+  width: 100%;
+  height: 52px;
+  justify-content: center;
+  max-width: none;
 }
 
 @media (min-width: 992px) {
+  /* Espacio libre arriba del formulario: ahí asoma el nudo */
+  .contact-form {
+    margin-top: clamp(150px, 17vw, 330px);
+  }
+
   .contact-grid {
     grid-template-columns: 1fr 1fr;
     gap: 80px;
-    align-items: end;
+    align-items: start;
   }
 
   .contact-form {
-    padding: 36px;
+    padding: 44px;
+    gap: 34px;
   }
 }
 </style>

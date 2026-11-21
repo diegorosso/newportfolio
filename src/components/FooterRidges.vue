@@ -59,9 +59,9 @@ const canvas = ref(null);
 const video = ref(null);
 const letterEls = ref([]);
 
-const LINES = 56; // cantidad de líneas
-const STEP = 4; // separación horizontal entre puntos de cada línea, px
-const SAMPLE = 96; // resolución con la que se lee el brillo del video
+const LINES = 64; // cantidad de líneas
+const STEP = 3; // separación horizontal entre puntos de cada línea, px
+const SAMPLE = 192; // resolución con la que se lee el brillo del video
 const WEIGHT_MIN = 250; // como el título de la referencia
 const WEIGHT_MAX = 800;
 
@@ -126,7 +126,7 @@ function sampleSource() {
   const source = video.value && video.value.readyState >= 2 ? video.value : posterImg;
   if (!source || (source === posterImg && !posterImg.complete)) return;
   // Un leve desenfoque suaviza el grano de la imagen: las crestas salen continuas
-  sampleCtx.filter = "blur(1.5px)";
+  sampleCtx.filter = "blur(1px)";
   sampleCtx.drawImage(source, 0, 0, SAMPLE, SAMPLE);
   sampleCtx.filter = "none";
   const data = sampleCtx.getImageData(0, 0, SAMPLE, SAMPLE).data;
@@ -136,18 +136,25 @@ function sampleSource() {
   }
 }
 
+/** Brillo en (u, v), de 0 a 1, con interpolación bilineal: sin escalones al agrandar */
 function lumAt(u, v) {
   if (u < 0 || u > 1 || v < 0 || v > 1) return 0;
-  const x = Math.min(SAMPLE - 1, Math.floor(u * SAMPLE));
-  const y = Math.min(SAMPLE - 1, Math.floor(v * SAMPLE));
-  return lum[y * SAMPLE + x];
+  const fx = u * (SAMPLE - 1);
+  const fy = v * (SAMPLE - 1);
+  const x0 = Math.floor(fx);
+  const y0 = Math.floor(fy);
+  const x1 = Math.min(SAMPLE - 1, x0 + 1);
+  const y1 = Math.min(SAMPLE - 1, y0 + 1);
+  const tx = fx - x0;
+  const ty = fy - y0;
+  const top = lum[y0 * SAMPLE + x0] * (1 - tx) + lum[y0 * SAMPLE + x1] * tx;
+  const bottom = lum[y1 * SAMPLE + x0] * (1 - tx) + lum[y1 * SAMPLE + x1] * tx;
+  return top * (1 - ty) + bottom * ty;
 }
 
 function draw(now) {
   if (!ctx || !width) return;
   const time = reduceMotion ? 0 : (now - startTime) / 1000;
-  sampleSource();
-
   smooth.hover += ((pointer.inside ? 1 : 0) - smooth.hover) * 0.08;
   smooth.x += (pointer.x - smooth.x) * 0.15;
   smooth.y += (pointer.y - smooth.y) * 0.15;
@@ -158,7 +165,7 @@ function draw(now) {
   const bottom = height * 0.96;
   const avgGap = (bottom - top) / (LINES - 1);
   // El relieve ocupa una franja central del pie
-  const region = Math.min(width * 0.62, height * 1.6);
+  const region = Math.min(width * 1.0, height * 3.4);
   const regionLeft = width / 2 - region / 2;
 
   // Onda expansiva del clic: edad en segundos (o -1 si no hay)
@@ -182,16 +189,23 @@ function draw(now) {
     const base = top + (bottom - top) * Math.pow(t, 1.45);
     const near = 0.45 + 0.55 * t; // lo cercano se ve más grande
     const gap = avgGap * near;
-    const amp = avgGap * 13 * near; // cuánto sube el relieve
+    const amp = avgGap * 24 * near; // cuánto sube el relieve
 
     ctx.beginPath();
     for (let x = 0; x <= width + STEP; x += STEP) {
-      const u = (x - regionLeft) / region;
-      // Curva sobre el brillo: lo más claro sube mucho más que el resto y aparece un pico
-      const l = Math.pow(lumAt(u, t), 1.8);
-      const jitter = (noise(x * 0.03 + i * 7.3 + time * 0.6) - 0.5) * gap * (0.3 + l * 1.4);
-      // Onda lenta que recorre las líneas todo el tiempo
-      const wave = Math.sin(x * 0.006 - time * 0.8 + i * 0.32) * gap * (0.35 + l * 0.9);
+      const u = x / width;
+      // Estilo "Unknown Pleasures": plano a los costados y picos filosos y desparejos al centro.
+      // El ruido avanza con i * 0.9, así las líneas vecinas se parecen y los picos forman crestas
+      const c = (u - 0.5) / 0.15;
+      const envelope = Math.exp(-c * c) * (0.8 + 0.2 * noise(i * 0.5 + 3.1));
+      const phase = i * 0.45 + time * 0.25;
+      const spike = Math.pow(Math.max(0, noise(u * 36 + phase) - 0.4) / 0.6, 2);
+      const body = noise(u * 9 + phase * 0.5 + 40);
+      // Aspereza fina: da los dientes irregulares de la carátula original
+      const rough = noise(u * 140 + i * 2.1 + time * 0.5) - 0.5;
+      const l = Math.max(0, envelope * (0.1 * body + 1.0 * spike + 0.22 * rough));
+      const jitter = (noise(x * 0.5 + i * 7.3) - 0.5) * gap * 0.12;
+      const wave = 0;
       // El cursor levanta las líneas cerca suyo
       const dx = (x - smooth.x) / 170;
       const dy = (base - smooth.y) / 150;

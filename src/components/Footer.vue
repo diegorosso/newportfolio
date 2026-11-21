@@ -1,6 +1,6 @@
 <template>
   <footer class="footer">
-    <!-- Relieve interactivo con el nombre (la imagen sale de Unreal) -->
+    <!-- Relieve interactivo con el nombre: la imagen de alturas sale de Unreal -->
     <FooterRidges :poster="relief.poster" :videos="relief.videos" />
 
     <div class="footer-bar wrap">
@@ -34,10 +34,10 @@
 
 <script setup>
 import FooterRidges from "./FooterRidges.vue";
-// Provisorio: el organismo, hasta que esté el relieve nuevo de Unreal
-import reliefPoster from "../assets/images/organismo-hero.webp";
-import reliefWebm from "../assets/videos/organismo-hero.webm";
-import reliefMp4 from "../assets/videos/organismo-hero.mp4";
+// Mapa de alturas hecho en Unreal (macizo montañoso): blanco = alto, negro = plano
+import reliefPoster from "../assets/images/relieve.webp";
+import reliefWebm from "../assets/videos/relieve.webm";
+import reliefMp4 from "../assets/videos/relieve.mp4";
 
 const year = new Date().getFullYear();
 

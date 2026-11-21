@@ -42,6 +42,13 @@ const props = defineProps({
   cell: { type: Number, default: 4.5 },
   /** Separación de la grilla de puntos de fondo, en px de CSS (igual que `.dot-grid`) */
   grid: { type: Number, default: 22 },
+  /** Dibuja la grilla de puntos de fondo (en el hero sí; en otras secciones, solo la figura) */
+  showGrid: { type: Boolean, default: true },
+  /**
+   * Modo tranquilo: sin hueco ni onda del clic. Solo se desliza apenas hacia el cursor
+   * (como un paralaje), para figuras que están detrás de un formulario o de texto
+   */
+  calm: { type: Boolean, default: false },
 });
 
 const emit = defineEmits(["ready"]);
@@ -205,6 +212,7 @@ const UNIFORMS = [
 
 /** Inclinación máxima del organismo hacia el cursor, como fracción de su ancho */
 const MAX_LEAN = 0.035;
+const MAX_LEAN_CALM = 0.07; // en modo tranquilo es la única reacción, así que es un poco mayor
 
 let gl;
 let program;
@@ -275,7 +283,7 @@ function updateThemeColor() {
 
   gl.useProgram(program);
   gl.uniform3f(uniforms.uPaper, rgb[0], rgb[1], rgb[2]);
-  gl.uniform1f(uniforms.uDotAlpha, dotAlpha ? parseFloat(dotAlpha[1]) : 0.13);
+  gl.uniform1f(uniforms.uDotAlpha, props.showGrid ? (dotAlpha ? parseFloat(dotAlpha[1]) : 0.13) : 0);
   if (!running) draw(performance.now());
 }
 
@@ -369,8 +377,8 @@ function draw(now) {
   const cy = box.y + box.h / 2;
   const reachX = Math.max(canvasRect.width * dpr, 1) * 0.5;
   const reachY = Math.max(canvasRect.height * dpr, 1) * 0.5;
-  const leanTargetX = Math.max(-1, Math.min(1, (smooth.x - cx) / reachX)) * box.w * MAX_LEAN * smooth.hover;
-  const leanTargetY = Math.max(-1, Math.min(1, (smooth.y - cy) / reachY)) * box.w * MAX_LEAN * smooth.hover;
+  const leanTargetX = Math.max(-1, Math.min(1, (smooth.x - cx) / reachX)) * box.w * (props.calm ? MAX_LEAN_CALM : MAX_LEAN) * smooth.hover;
+  const leanTargetY = Math.max(-1, Math.min(1, (smooth.y - cy) / reachY)) * box.w * (props.calm ? MAX_LEAN_CALM : MAX_LEAN) * smooth.hover;
   smooth.leanX += (leanTargetX - smooth.leanX) * ease(3.7);
   smooth.leanY += (leanTargetY - smooth.leanY) * ease(3.7);
 
@@ -390,7 +398,7 @@ function draw(now) {
   gl.uniform1f(uniforms.uTime, reduceMotion ? 0 : time);
   gl.uniform1f(uniforms.uIntro, easedIntro);
   gl.uniform2f(uniforms.uMouse, smooth.x, smooth.y);
-  gl.uniform1f(uniforms.uHover, smooth.hover);
+  gl.uniform1f(uniforms.uHover, props.calm ? 0 : smooth.hover);
   gl.uniform3f(uniforms.uRipple, rippleCenter[0], rippleCenter[1], rippleStart < 0 ? -1 : rippleAge);
 
   gl.clearColor(0, 0, 0, 0);
@@ -458,7 +466,7 @@ function onPointerUp(event) {
 }
 
 function onPointerDown(event) {
-  if (!canvas.value || reduceMotion) return;
+  if (!canvas.value || reduceMotion || props.calm) return;
   const rect = canvas.value.getBoundingClientRect();
   const inside =
     event.clientX >= rect.left &&
