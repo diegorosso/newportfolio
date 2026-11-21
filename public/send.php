@@ -11,6 +11,7 @@
 const TO = 'diegorosso1988@gmail.com';
 const MAX_MESSAGE = 1000;
 const COOLDOWN_SECONDS = 30;
+const FROM_USER = 'hola'; // el remitente es hola@<dominio del sitio>
 
 header('Content-Type: application/json; charset=UTF-8');
 header('Cache-Control: no-store');
@@ -79,7 +80,7 @@ $body = "Nombre: $name\nEmail: $email\n\n$message\n";
 // El remitente tiene que ser del propio dominio, si no el hosting lo rechaza o cae en spam
 $fromHost = preg_match('/^[a-z0-9.-]+$/i', $host) ? $host : 'localhost';
 $headers = [
-    'From: Diego Rosso Web <no-reply@' . $fromHost . '>',
+    'From: Diego Rosso Web <' . FROM_USER . '@' . $fromHost . '>',
     'Reply-To: ' . $name . ' <' . $email . '>',
     'MIME-Version: 1.0',
     'Content-Type: text/plain; charset=UTF-8',
