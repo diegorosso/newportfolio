@@ -1,5 +1,8 @@
 <template>
   <footer class="footer">
+    <!-- Relieve interactivo con el nombre (la imagen sale de Unreal) -->
+    <FooterRidges :poster="relief.poster" :videos="relief.videos" />
+
     <div class="footer-bar wrap">
       <p class="label">© {{ year }} Diego Rosso</p>
       <ul class="footer-links">
@@ -30,7 +33,21 @@
 </template>
 
 <script setup>
+import FooterRidges from "./FooterRidges.vue";
+// Provisorio: el organismo, hasta que esté el relieve nuevo de Unreal
+import reliefPoster from "../assets/images/organismo-hero.webp";
+import reliefWebm from "../assets/videos/organismo-hero.webm";
+import reliefMp4 from "../assets/videos/organismo-hero.mp4";
+
 const year = new Date().getFullYear();
+
+const relief = {
+  poster: reliefPoster,
+  videos: [
+    { src: reliefWebm, type: 'video/webm; codecs="vp9"' },
+    { src: reliefMp4, type: 'video/mp4; codecs="avc1.64001F"' },
+  ],
+};
 </script>
 
 <style scoped>

@@ -5,12 +5,23 @@
         Diego<span class="label-dim">.</span>Rosso
       </a>
 
+      <!-- Como en la referencia: dos links, el logo al centro y dos links -->
       <nav class="nav-desktop" aria-label="Principal">
         <ul class="nav-list">
-          <li v-for="(link, index) in links" :key="link.href">
-            <a :href="link.href" class="nav-link label">
-              <span class="label-dim">{{ pad(index + 1) }}</span>
+          <li v-for="link in leftLinks" :key="link.href">
+            <a :href="link.href" class="nav-link label" :download="link.download || null">
+              <span class="label-dim">{{ link.number }}</span>
               {{ link.label }}
+            </a>
+          </li>
+        </ul>
+        <a href="#home" class="logo-mark" aria-label="Inicio">DR</a>
+        <ul class="nav-list">
+          <li v-for="link in rightLinks" :key="link.href">
+            <a :href="link.href" class="nav-link label" :download="link.download || null">
+              <span class="label-dim">{{ link.number }}</span>
+              {{ link.label }}
+              <span v-if="link.download" aria-hidden="true">↓</span>
             </a>
           </li>
         </ul>
@@ -34,9 +45,9 @@
 
     <div id="mobile-menu" class="mobile-menu wrap" :class="{ active: isNavActive }">
       <ul>
-        <li v-for="(link, index) in links" :key="link.href">
+        <li v-for="link in sectionLinks" :key="link.href">
           <a :href="link.href" class="mobile-link" @click="closeNav">
-            <span class="label label-dim">{{ pad(index + 1) }}</span>
+            <span class="label label-dim">{{ link.number }}</span>
             <span class="display">{{ link.label }}</span>
           </a>
         </li>
@@ -57,17 +68,23 @@ export default {
   data() {
     return {
       isNavActive: false,
-      links: [
-        { label: "Sobre mí", href: "#about" },
-        { label: "Proyectos", href: "#project" },
-        { label: "Contacto", href: "#contact" },
+      leftLinks: [
+        { number: "01", label: "Sobre mí", href: "#about" },
+        { number: "02", label: "Proyectos", href: "#project" },
+      ],
+      rightLinks: [
+        { number: "03", label: "Contacto", href: "#contact" },
+        { number: "04", label: "CV", href: "/diegoCv.pdf", download: true },
       ],
     };
   },
-  methods: {
-    pad(n) {
-      return String(n).padStart(2, "0");
+  computed: {
+    /** En el menú del celular van solo las secciones; el CV tiene su propio botón */
+    sectionLinks() {
+      return [...this.leftLinks, ...this.rightLinks].filter((link) => !link.download);
     },
+  },
+  methods: {
     toggleNav() {
       this.isNavActive = !this.isNavActive;
       document.body.classList.toggle("nav-active", this.isNavActive);
@@ -96,22 +113,24 @@ export default {
   z-index: 40;
 }
 
+/* Translúcido y desenfocado: el campo del hero se ve tenue por detrás */
 .header-bar {
   position: relative;
   z-index: 2;
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr auto;
   align-items: center;
-  justify-content: space-between;
   gap: 16px;
   height: var(--header-h);
   border-block-end: 1px solid var(--line);
-  background-color: color-mix(in srgb, var(--ink) 82%, transparent);
-  -webkit-backdrop-filter: blur(10px);
-  backdrop-filter: blur(10px);
+  background-color: color-mix(in srgb, var(--ink) 85%, transparent);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
 }
 
 .brand {
   display: flex;
+  justify-self: start;
   color: var(--paper);
 }
 
@@ -151,9 +170,29 @@ export default {
   transform: scaleX(1);
 }
 
+/* Logo: iniciales en la display, dentro de un recuadro fino */
+.logo-mark {
+  padding: 4px 6px 2px;
+  border: 1px solid color-mix(in srgb, var(--paper) 70%, transparent);
+  color: var(--paper);
+  font-family: var(--fontFamily-display);
+  font-size: 1.8rem;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  transition: background-color var(--transition-1), color var(--transition-1);
+}
+
+.logo-mark:is(:hover, :focus-visible) {
+  background-color: var(--paper);
+  color: var(--ink);
+}
+
 .header-actions {
   display: flex;
   align-items: center;
+  justify-self: end;
   gap: 10px;
 }
 
@@ -208,13 +247,18 @@ export default {
 }
 
 @media (min-width: 992px) {
-  .nav-desktop {
-    display: block;
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
+  .header-bar {
+    grid-template-columns: 1fr auto 1fr;
   }
 
+  .nav-desktop {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+  }
+
+  /* En desktop el CV está en el menú (04) */
+  .cv-btn,
   .menu-btn,
   .mobile-menu {
     display: none;

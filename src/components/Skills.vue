@@ -1,238 +1,204 @@
 <template>
-  <ul class="skills">
-    <li v-for="(tech, index) in technologies" :key="tech.name" class="skill">
-      <div class="skill-top">
-        <span class="label label-dim">{{ String(index + 1).padStart(2, "0") }}</span>
-        <img :src="tech.img" alt="" width="28" height="28" loading="lazy" class="skill-icon" />
-      </div>
-      <h3 class="skill-name">{{ tech.name }}</h3>
-      <p class="skill-text muted">{{ tech.description }}</p>
-    </li>
-  </ul>
+  <div class="skills" aria-labelledby="skills-title">
+    <header class="skills-head">
+      <h3 id="skills-title" class="display skills-title" data-split>Tecnologías</h3>
+      <p class="label label-dim">Stack · {{ total }}</p>
+    </header>
+
+    <div class="skills-grid">
+      <article v-for="(group, index) in groups" :key="group.title" class="skills-cell" data-reveal>
+        <header class="cell-head">
+          <h4 class="label">{{ group.title }}</h4>
+          <span class="label label-dim">{{ String(index + 1).padStart(2, "0") }}</span>
+        </header>
+        <ul class="chips">
+          <li v-for="item in group.items" :key="item" class="chip">{{ item }}</li>
+        </ul>
+      </article>
+    </div>
+
+    <p class="label label-dim areas-label">Áreas de trabajo</p>
+    <ul class="areas">
+      <li v-for="area in areas" :key="area" class="area">
+        {{ area }}<span class="area-slash" aria-hidden="true">/</span>
+      </li>
+    </ul>
+  </div>
 </template>
 
 <script>
-import htmlImg from "../assets/images/html.png";
-import cssImg from "../assets/images/css.png";
-import jsImg from "../assets/images/js.png";
-import vueImg from "../assets/images/vue.png";
-import angImg from "../assets/images/angular.png";
-import gitImg from "../assets/images/git.png";
-import worImg from "../assets/images/wordPress.png";
-import phoImg from "../assets/images/photoshop.png";
-import afterImg from "../assets/images/effects.png";
-import proImg from "../assets/images/processing.png";
-import Canva from "../assets/images/Canva.png";
-import Veutify from "../assets/images/veutify.png";
-import Node from "../assets/images/Node.js.png";
-import MongoDB from "../assets/images/MongoDB.png";
-import Firebase from "../assets/images/Firebase.png";
-import Figma from "../assets/images/Figma.png";
-import Bootstrap from "../assets/images/bootstrap.png";
-import Sass from "../assets/images/sass.png";
-import ClaudeIcon from "../assets/images/claude-icon.png";
-import GroqIcon from "../assets/images/groq-icon.png";
-
 export default {
+  name: "SkillsBlock",
   data() {
     return {
-      technologies: [
+      groups: [
         {
-          name: "HTML",
-          img: htmlImg,
-          description:
-            "HTML (HyperText Markup Language) es el lenguaje estándar de marcado para la creación de páginas web. Define la estructura del contenido web mediante etiquetas y elementos.",
+          title: "Desarrollo",
+          items: [
+            "HTML", "CSS", "JavaScript", "Vue.js", "Vite", "Vuetify", "Angular", "Sass",
+            "Bootstrap", "GSAP", "Lenis", "WordPress", "Responsive", "SEO",
+          ],
         },
         {
-          name: "CSS",
-          img: cssImg,
-          description:
-            "CSS (Cascading Style Sheets) se utiliza para estilizar documentos HTML, permitiendo el diseño visual y la presentación de las páginas web con colores, fuentes y posicionamiento.",
+          title: "Backend y publicación",
+          items: [
+            "Node.js", "Firebase", "MongoDB", "Netlify Functions", "REST API",
+            "Git", "GitHub", "GitHub Actions", "Netlify", "Hostinger",
+          ],
         },
         {
-          name: "JavaScript",
-          img: jsImg,
-          description:
-            "JavaScript es un lenguaje de programación que permite añadir interactividad a los sitios web, como animaciones, validaciones de formularios y manipulación del DOM.",
+          title: "IA",
+          items: ["Claude", "Claude Code", "Groq", "Llama 3.1", "Chatbots", "Prompt engineering"],
         },
         {
-          name: "Vue.js",
-          img: vueImg,
-          description:
-            "Vue.js es un framework progresivo de JavaScript para la construcción de interfaces de usuario y aplicaciones web de una sola página con un enfoque en la reactividad y la modularidad.",
+          title: "Automatización",
+          items: ["n8n", "Make", "Zapier", "WhatsApp", "Email", "Webhooks"],
         },
         {
-          name: "Angular",
-          img: angImg,
-          description:
-            "Angular es un framework de desarrollo web basado en TypeScript que permite la creación de aplicaciones web dinámicas y escalables con arquitectura modular.",
+          title: "3D y tiempo real",
+          items: [
+            "Unreal Engine", "Niagara", "Blueprints", "TouchDesigner", "WebGL", "GLSL",
+            "Processing", "Shaders",
+          ],
         },
         {
-          name: "Git",
-          img: gitImg,
-          description:
-            "Git es un sistema de control de versiones distribuido que permite a los desarrolladores rastrear cambios en el código, colaborar en proyectos y gestionar versiones de manera eficiente.",
-        },
-        {
-          name: "WordPress",
-          img: worImg,
-          description:
-            "WordPress es un sistema de gestión de contenidos (CMS) que facilita la creación y administración de sitios web y blogs sin necesidad de conocimientos avanzados de programación.",
-        },
-        {
-          name: "Photoshop",
-          img: phoImg,
-          description:
-            "Adobe Photoshop es un software de edición y manipulación de imágenes, utilizado en diseño gráfico, fotografía digital y creación de contenido visual.",
-        },
-        {
-          name: "After Effects",
-          img: afterImg,
-          description:
-            "Adobe After Effects es una aplicación de postproducción de video que permite la creación de efectos visuales, animaciones y gráficos en movimiento.",
-        },
-        {
-          name: "Processing",
-          img: proImg,
-          description:
-            "Processing es un entorno de programación y un lenguaje diseñado para el arte visual y la educación, facilitando la creación de gráficos y animaciones interactivas.",
-        },
-        {
-          name: "Canva",
-          img: Canva,
-          description:
-            "Canva es una herramienta de diseño gráfico en línea que permite crear presentaciones, infografías y otros contenidos visuales de manera sencilla y accesible.",
-        },
-        {
-          name: "Vuetify",
-          img: Veutify,
-          description:
-            "Vuetify es un framework de componentes de Material Design para Vue.js, que facilita la creación de interfaces de usuario atractivas y responsivas.",
-        },
-        {
-          name: "Node.js",
-          img: Node,
-          description:
-            "Node.js es un entorno de ejecución de JavaScript del lado del servidor, que permite construir aplicaciones escalables y rápidas utilizando JavaScript.",
-        },
-        {
-          name: "MongoDB",
-          img: MongoDB,
-          description:
-            "MongoDB es una base de datos NoSQL orientada a documentos, que permite almacenar y gestionar grandes volúmenes de datos de manera flexible y escalable.",
-        },
-        {
-          name: "Firebase",
-          img: Firebase,
-          description:
-            "Firebase es una plataforma de desarrollo de aplicaciones móviles y web que ofrece servicios como autenticación, base de datos en tiempo real y almacenamiento en la nube.",
-        },
-        {
-          name: "Figma",
-          img: Figma,
-          description:
-            "Figma es una herramienta de diseño colaborativo en línea que permite crear interfaces de usuario, prototipos y diseños gráficos de manera eficiente y en tiempo real.",
-        },
-        {
-          name: "Bootstrap",
-          img: Bootstrap,
-          description:
-            "Bootstrap es un framework front-end que facilita el desarrollo de sitios web responsivos y móviles mediante el uso de HTML, CSS y JavaScript predefinidos.",
-        },
-        {
-          name: "Sass",
-          img: Sass,
-          description:
-            "Sass es un preprocesador CSS que añade características como variables, anidamiento y mixins, facilitando la escritura y mantenimiento de estilos CSS más complejos.",
-        },
-        {
-          name: "Claude (Anthropic)",
-          img: ClaudeIcon,
-          description:
-            "Uso Claude como asistente de desarrollo con IA: prototipado rápido de componentes Vue, generación de interfaces, y aceleración de flujos de trabajo en proyectos como este mismo portfolio.",
-        },
-        {
-          name: "Groq",
-          img: GroqIcon,
-          description:
-            "Plataforma de inferencia de IA de alta velocidad. La integré en producción en el chatbot de Sukata BJJ (modelo Llama 3.1) usando funciones serverless de Netlify para responder consultas de clientes en tiempo real.",
+          title: "Diseño y motion",
+          items: [
+            "Figma", "Photoshop", "After Effects", "Canva", "Diseño gráfico",
+            "Diseño de interfaces", "Motion graphics",
+          ],
         },
       ],
+      areas: [
+        "Desarrollo web",
+        "Diseño de interfaces",
+        "IA aplicada y chatbots",
+        "Automatización de procesos",
+        "Productos digitales",
+        "Diseño gráfico y motion",
+      ],
     };
+  },
+  computed: {
+    total() {
+      return new Set(this.groups.flatMap((group) => group.items)).size;
+    },
   },
 };
 </script>
 
 <style scoped>
-/* Celdas separadas por líneas de 1px: el fondo de la grilla hace de línea */
 .skills {
+  margin-block-start: 96px;
+}
+
+.skills-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px 24px;
+  margin-block-end: 40px;
+}
+
+.skills-title {
+  font-size: var(--fs-h2);
+}
+
+/* Celdas separadas por líneas finas, con cruces en las esquinas como en la referencia */
+.skills-grid {
+  position: relative;
   display: grid;
   gap: 1px;
   background-color: var(--line);
   border: 1px solid var(--line);
 }
 
-.skill {
-  display: grid;
-  align-content: start;
-  gap: 12px;
-  padding: 20px;
-  background-color: var(--ink);
-  transition: background-color var(--transition-1);
+.skills-grid::before,
+.skills-grid::after {
+  content: "+";
+  position: absolute;
+  font-family: var(--fontFamily-mono);
+  font-size: 1.2rem;
+  line-height: 1;
+  color: var(--faint);
 }
 
-.skill:hover {
+.skills-grid::before {
+  top: -7px;
+  left: -4px;
+}
+
+.skills-grid::after {
+  bottom: -7px;
+  right: -4px;
+}
+
+.skills-cell {
+  display: grid;
+  align-content: start;
+  gap: 22px;
+  padding: 24px;
+  background-color: var(--ink);
+}
+
+.cell-head {
+  display: flex;
+  justify-content: space-between;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* Etiquetas con borde, como en la referencia (más grandes que el chip base) */
+.skills .chip {
+  padding: 5px 10px;
+  font-size: 1.1rem;
+  color: var(--paper);
+  transition: border-color var(--transition-1), background-color var(--transition-1);
+}
+
+.skills .chip:hover {
+  border-color: var(--paper);
   background-color: var(--surface);
 }
 
-.skill-top {
+.areas-label {
+  margin-block: 40px 14px;
+}
+
+.areas {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px 0;
 }
 
-.skill-icon {
-  width: 28px;
-  height: 28px;
-  object-fit: contain;
-  filter: grayscale(1);
-  opacity: 0.7;
-  transition: filter var(--transition-1), opacity var(--transition-1);
-}
-
-.skill:hover .skill-icon {
-  filter: none;
-  opacity: 1;
-}
-
-.skill-name {
+.area {
   font-family: var(--fontFamily-display);
-  font-weight: var(--weight-regular);
-  font-size: 3.2rem;
-  line-height: 1;
-  text-transform: uppercase;
+  font-weight: var(--weight-light);
+  font-size: clamp(2.4rem, 1.4rem + 1.6vw, 3.6rem);
+  line-height: 1.2;
+  color: color-mix(in srgb, var(--paper) 85%, transparent);
 }
 
-.skill-text {
-  font-size: var(--fs-small);
-  line-height: 1.55;
+.area-slash {
+  display: inline-block;
+  padding-inline: 0.55em;
+  color: var(--faint);
 }
 
-@media (min-width: 640px) {
-  .skills {
+@media (min-width: 768px) {
+  .skills-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
-@media (min-width: 992px) {
-  .skills {
+@media (min-width: 1200px) {
+  .skills-grid {
     grid-template-columns: repeat(3, 1fr);
-  }
-}
-
-@media (min-width: 1400px) {
-  .skills {
-    grid-template-columns: repeat(4, 1fr);
   }
 }
 </style>

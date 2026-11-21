@@ -1,134 +1,362 @@
 <template>
   <section class="section contact" aria-label="Contacto" id="contact">
-    <div class="wrap">
-      <SectionHead :index="3" :total="3" label="Contacto" title="Trabajemos juntos" />
+    <div class="wrap contact-grid">
+      <!-- Izquierda: mail grande, texto, datos y redes -->
+      <div class="contact-main">
+        <SectionHead :index="3" :total="3" label="Contacto" title="Trabajemos juntos" />
 
-      <a
-        href="mailto:diegorosso1988@gmail.com"
-        class="contact-mail lead"
-        data-cursor="Escribir"
-        data-reveal
-      >
-        diegorosso1988@gmail.com <span class="arrow" aria-hidden="true">↗</span>
-      </a>
+        <a
+          href="mailto:diegorosso1988@gmail.com"
+          class="contact-mail"
+          data-cursor="Escribir"
+          data-reveal
+        >
+          <span class="contact-mail-text">diegorosso1988@gmail.com</span>
+          <span class="arrow" aria-hidden="true">↗</span>
+        </a>
 
-      <div class="contact-grid">
-        <form action="./index.html" method="post" class="contact-form" data-reveal>
-          <label v-for="field in fields" :key="field.name" class="field">
-            <span class="label label-dim">{{ field.label }}</span>
-            <textarea
-              v-if="field.tag === 'textarea'"
-              :name="field.name"
-              :required="field.required"
-              rows="5"
-              class="field-input"
-            ></textarea>
-            <input
-              v-else
-              :type="field.type"
-              :name="field.name"
-              :required="field.required"
-              :autocomplete="field.autocomplete"
-              class="field-input"
-            />
-          </label>
+        <div class="contact-intro" data-reveal>
+          <h3 class="contact-sub">Hablemos de tu proyecto</h3>
+          <p class="muted">
+            Estoy disponible para trabajo remoto, híbrido o freelance, y abierto a
+            nuevos proyectos y colaboraciones. Escribime y lo charlamos.
+          </p>
+        </div>
 
+        <ul class="contact-list" data-reveal>
+          <li v-for="item in contactItems" :key="item.key" class="contact-row">
+            <span class="label label-dim row-key">{{ item.key }}</span>
+            <svg class="row-icon" viewBox="0 0 24 24" aria-hidden="true">
+              <path v-for="(d, i) in icons[item.icon]" :key="i" :d="d" />
+            </svg>
+            <a
+              v-if="item.href"
+              :href="item.href"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="row-value"
+            >
+              {{ item.text }}
+              <span class="row-arrow" aria-hidden="true">↗</span>
+            </a>
+            <address v-else class="row-value">{{ item.text }}</address>
+          </li>
+        </ul>
+
+        <div class="contact-socials" data-reveal>
+          <a
+            v-for="social in socials"
+            :key="social.label"
+            :href="social.href"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="btn btn--ghost"
+          >
+            <svg class="row-icon" viewBox="0 0 24 24" aria-hidden="true">
+              <path v-for="(d, i) in icons[social.icon]" :key="i" :d="d" />
+            </svg>
+            {{ social.label }}
+          </a>
+        </div>
+      </div>
+
+      <!-- Derecha: formulario tipo terminal, como en la referencia -->
+      <form class="contact-form" data-reveal @submit.prevent="send">
+        <p class="label form-head" aria-hidden="true">
+          <span>&gt; nuevo_mensaje <span class="caret">_</span></span>
+          <span class="label-dim">✳</span>
+        </p>
+
+        <label class="field">
+          <span class="label"><span class="label-dim">01 ·</span> Nombre</span>
+          <input
+            v-model.trim="form.name"
+            type="text"
+            name="name"
+            autocomplete="name"
+            placeholder="Tu nombre"
+            required
+            class="field-input"
+          />
+        </label>
+
+        <label class="field">
+          <span class="label"><span class="label-dim">02 ·</span> Email</span>
+          <input
+            v-model.trim="form.email"
+            type="email"
+            name="email"
+            autocomplete="email"
+            placeholder="tu@email.com"
+            required
+            class="field-input"
+          />
+        </label>
+
+        <label class="field">
+          <span class="label"><span class="label-dim">03 ·</span> Mensaje</span>
+          <textarea
+            v-model="form.message"
+            name="message"
+            rows="6"
+            :maxlength="MAX_MESSAGE"
+            placeholder="Contame tu idea…"
+            required
+            class="field-input"
+          ></textarea>
+        </label>
+
+        <div class="form-foot">
           <button type="submit" class="btn">
             Enviar mensaje <span class="arrow" aria-hidden="true">→</span>
           </button>
-        </form>
-
-        <div class="contact-side" data-reveal>
-          <dl class="contact-list">
-            <div v-for="item in contactItems" :key="item.key" class="contact-row">
-              <dt class="label label-dim">{{ item.key }}</dt>
-              <dd class="label">
-                <a
-                  v-if="item.href"
-                  :href="item.href"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  >{{ item.text }}</a
-                >
-                <address v-else>{{ item.text }}</address>
-              </dd>
-            </div>
-          </dl>
-
-          <iframe
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3282.078080279516!2d-58.51591742423494!3d-34.49965777298403!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x95bcb0539b37e3f1%3A0xf25a4f75cb37aa80!2sSan%20Isidro%2C%20Provincia%20de%20Buenos%20Aires!5e0!3m2!1ses!2sar!4v1712076540000!5m2!1ses!2sar"
-            title="Mapa de San Isidro, Buenos Aires"
-            loading="lazy"
-            referrerpolicy="no-referrer-when-downgrade"
-            class="map"
-          ></iframe>
+          <span class="label label-dim">{{ form.message.length }} / {{ MAX_MESSAGE }}</span>
         </div>
-      </div>
+      </form>
     </div>
   </section>
 </template>
 
 <script setup>
+import { reactive } from "vue";
 import SectionHead from "./SectionHead.vue";
 
-const fields = [
-  { tag: "input", type: "text", name: "name", label: "Nombre", autocomplete: "name", required: true },
-  { tag: "input", type: "email", name: "email_address", label: "Email", autocomplete: "email", required: true },
-  { tag: "input", type: "tel", name: "phone", label: "Teléfono", autocomplete: "tel", required: false },
-  { tag: "textarea", name: "message", label: "Mensaje", required: true },
-];
+const EMAIL = "diegorosso1988@gmail.com";
+const MAX_MESSAGE = 1000;
+
+const form = reactive({ name: "", email: "", message: "" });
+
+/**
+ * Antes el formulario se mandaba a ./index.html y el mensaje se perdía.
+ * Ahora abre el programa de correo de quien escribe, con el mensaje ya armado.
+ */
+function send() {
+  const subject = `Contacto desde el portfolio — ${form.name}`;
+  const body = `${form.message}\n\n${form.name}\n${form.email}`;
+  window.location.href = `mailto:${EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+}
 
 const contactItems = [
-  { key: "Email", text: "diegorosso1988@gmail.com", href: "mailto:diegorosso1988@gmail.com" },
-  { key: "WhatsApp", text: "11 3145 3388", href: "https://wa.me/541131453388" },
-  { key: "Base", text: "San Isidro, Buenos Aires, AR" },
-  { key: "LinkedIn", text: "in/diegorosso1988", href: "https://www.linkedin.com/in/diegorosso1988/" },
-  { key: "GitHub", text: "diegorosso", href: "https://github.com/diegorosso" },
+  { key: "Email", icon: "mail", text: EMAIL, href: `mailto:${EMAIL}` },
+  { key: "WhatsApp", icon: "phone", text: "11 3145 3388", href: "https://wa.me/541131453388" },
+  { key: "Base", icon: "pin", text: "San Isidro, Buenos Aires, AR" },
 ];
+
+const socials = [
+  { label: "GitHub", icon: "github", href: "https://github.com/diegorosso" },
+  { label: "LinkedIn", icon: "linkedin", href: "https://www.linkedin.com/in/diegorosso1988/" },
+];
+
+// Íconos de línea fina (trazos de 24×24, al estilo de los de la referencia)
+const icons = {
+  mail: ["M3 6h18v12H3z", "M3 7l9 6 9-6"],
+  phone: [
+    "M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z",
+  ],
+  pin: ["M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z", "M12 7a3 3 0 1 1 0 6 3 3 0 0 1 0-6z"],
+  github: [
+    "M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.1-1.3-.4-2.5-1.1-3.5.3-1.1.3-2.3 0-3.5 0 0-1 0-3 1.5a10.3 10.3 0 0 0-6 0C8 2 7 2 7 2c-.3 1.2-.3 2.4 0 3.5A5.4 5.4 0 0 0 5.9 9c0 3.5 3 5.5 6 5.5-.4.5-.8 1.1-.9 1.7-.2.6-.2 1.2-.1 1.8v4",
+    "M9 18c-4.5 2-5-2-7-2",
+  ],
+  linkedin: [
+    "M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z",
+    "M2 9h4v12H2z",
+    "M4 2a2 2 0 1 1 0 4 2 2 0 0 1 0-4z",
+  ],
+};
 </script>
 
 <style scoped>
-.contact-mail {
-  display: inline-flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: 0.3em;
-  margin-block-end: 56px;
-  overflow-wrap: anywhere;
-  background-image: linear-gradient(var(--paper), var(--paper));
-  background-repeat: no-repeat;
-  background-position: left bottom;
-  background-size: 0 1px;
-  transition: background-size 0.5s var(--ease-out);
-}
-
-.contact-mail:is(:hover, :focus-visible) {
-  background-size: 100% 1px;
-}
-
 .contact-grid {
   display: grid;
   gap: 56px;
 }
 
-.contact-form {
+.contact-main {
   display: grid;
-  gap: 22px;
   align-content: start;
+}
+
+/* Mail grande, fino y en minúscula, con una línea debajo */
+.contact-mail {
+  display: inline-flex;
+  align-items: baseline;
+  justify-self: start;
+  gap: 0.35em;
+  max-width: 100%;
+  padding-block-end: 14px;
+  margin-block: -24px 48px;
+  border-block-end: 1px solid var(--line-strong);
+  font-family: var(--fontFamily-display);
+  font-weight: var(--weight-light);
+  font-size: clamp(3.2rem, 1.2rem + 3.6vw, 7.2rem);
+  line-height: 1;
+  transition: border-color var(--transition-1);
+}
+
+.contact-mail-text {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.contact-mail .arrow {
+  font-family: var(--fontFamily-sans);
+  font-size: 0.6em;
+  transition: transform var(--transition-1);
+}
+
+.contact-mail:is(:hover, :focus-visible) {
+  border-color: var(--paper);
+}
+
+.contact-mail:is(:hover, :focus-visible) .arrow {
+  transform: translate(3px, -3px);
+}
+
+.contact-intro {
+  display: grid;
+  gap: 14px;
+  max-width: 48ch;
+  margin-block-end: 32px;
+}
+
+.contact-sub {
+  font-family: var(--fontFamily-display);
+  font-weight: var(--weight-regular);
+  font-size: clamp(2.8rem, 2rem + 1.4vw, 4rem);
+  line-height: 1;
+}
+
+/* Filas de datos: etiqueta, ícono, valor y flecha */
+.contact-list {
+  border-block-start: 1px solid var(--line);
+  max-width: 740px;
+}
+
+.contact-row {
+  display: grid;
+  grid-template-columns: 96px 20px 1fr;
+  align-items: center;
+  gap: 14px;
+  padding-block: 16px;
+  border-block-end: 1px solid var(--line);
+}
+
+.row-icon {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  color: var(--muted);
+}
+
+.row-value {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  font-family: var(--fontFamily-mono);
+  font-size: 1.3rem;
+  overflow-wrap: anywhere;
+}
+
+.row-arrow {
+  color: var(--muted);
+  transition: color var(--transition-1), transform var(--transition-1);
+}
+
+a.row-value:is(:hover, :focus-visible) .row-arrow {
+  color: var(--paper);
+  transform: translate(2px, -2px);
+}
+
+.contact-socials {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-block-start: 24px;
+}
+
+.contact-socials .btn {
+  gap: 8px;
+}
+
+.contact-socials .row-icon {
+  color: inherit;
+}
+
+/* Formulario tipo terminal, en un panel con cruces en dos esquinas */
+.contact-form {
+  position: relative;
+  display: grid;
+  gap: 28px;
+  align-content: start;
+  padding: 28px;
+  border: 1px solid var(--line);
+  background-color: color-mix(in srgb, var(--ink) 92%, transparent);
+}
+
+.contact-form::before,
+.contact-form::after {
+  content: "+";
+  position: absolute;
+  font-family: var(--fontFamily-mono);
+  font-size: 1.2rem;
+  line-height: 1;
+  color: var(--faint);
+}
+
+.contact-form::before {
+  top: -7px;
+  left: -4px;
+}
+
+.contact-form::after {
+  bottom: -7px;
+  right: -4px;
+}
+
+.form-head {
+  display: flex;
+  justify-content: space-between;
+}
+
+.form-head span {
+  display: inline;
+}
+
+.caret {
+  animation: blink 1s steps(1) infinite;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
 }
 
 .field {
   display: grid;
-  gap: 6px;
+  gap: 10px;
+}
+
+.field .label span {
+  display: inline;
 }
 
 .field-input {
-  padding-block: 10px;
-  border-block-end: 1px solid var(--line-strong);
+  padding-block: 8px 14px;
+  border-block-end: 1px solid var(--line);
   color: var(--paper);
   font-size: var(--fs-body);
   outline: none;
   transition: border-color var(--transition-1);
+}
+
+.field-input::placeholder {
+  color: var(--faint);
 }
 
 .field-input:focus {
@@ -136,58 +364,39 @@ const contactItems = [
 }
 
 textarea.field-input {
-  resize: vertical;
-  min-height: 120px;
+  resize: none;
+  min-height: 150px;
 }
 
-.contact-form .btn {
-  justify-self: start;
-  margin-block-start: 12px;
+/* En celulares la etiqueta ocupa menos, así el mail entra en una línea */
+@media (max-width: 479px) {
+  .contact-row {
+    grid-template-columns: 64px 16px 1fr;
+    gap: 10px;
+  }
+
+  .row-value {
+    font-size: 1.15rem;
+  }
 }
 
-.contact-side {
-  display: grid;
-  gap: 32px;
-  align-content: start;
-}
-
-.contact-row {
+.form-foot {
   display: flex;
+  flex-wrap: wrap;
+  align-items: center;
   justify-content: space-between;
-  gap: 16px;
-  padding-block: 12px;
-  border-block-start: 1px solid var(--line);
-}
-
-.contact-row:last-child {
-  border-block-end: 1px solid var(--line);
-}
-
-.contact-row dd {
-  text-align: right;
-  overflow-wrap: anywhere;
-}
-
-.contact-row a:is(:hover, :focus-visible) {
-  text-decoration: underline;
-  text-underline-offset: 3px;
-}
-
-.map {
-  width: 100%;
-  aspect-ratio: 4 / 3;
-  border: 1px solid var(--line);
-  filter: grayscale(1) invert(0.92) contrast(0.9);
-}
-
-body.light-theme .map {
-  filter: grayscale(1);
+  gap: 12px;
 }
 
 @media (min-width: 992px) {
   .contact-grid {
     grid-template-columns: 1fr 1fr;
     gap: 80px;
+    align-items: end;
+  }
+
+  .contact-form {
+    padding: 36px;
   }
 }
 </style>

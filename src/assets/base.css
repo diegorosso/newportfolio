@@ -156,6 +156,11 @@ html.lenis body {
   scroll-behavior: auto !important;
 }
 
+/* Mientras está la pantalla de carga, Lenis frena y la página no se puede scrollear */
+.lenis.lenis-stopped {
+  overflow: clip;
+}
+
 body {
   background-color: var(--ink);
   color: var(--paper);

@@ -2,16 +2,31 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SplitText } from "gsap/SplitText";
 import Lenis from "lenis";
+import { introDone, showIntro } from "./intro.js";
 
 gsap.registerPlugin(ScrollTrigger, SplitText);
 
-// El preloader tapa la pantalla ~1.5 s: lo que está en el hero espera a que se retire.
-const HERO_DELAY = 1.2;
+let introFinished = false;
+introDone.then(() => {
+  introFinished = true;
+});
+
+const inHero = (el) => Boolean(el.closest("#home"));
+
+/**
+ * Lo que está en el hero espera a que se retire la pantalla de carga:
+ * la animación queda en su estado inicial y arranca cuando termina la carga.
+ */
+function playAfterIntro(tween) {
+  if (!introFinished) {
+    tween.pause();
+    introDone.then(() => tween.play());
+  }
+  return tween;
+}
 
 const headerOffset = () =>
   -(document.querySelector(".header-bar")?.offsetHeight ?? 0);
-
-const heroDelay = (el) => (el.closest("#home") ? HERO_DELAY : 0);
 
 /**
  * Los links internos (#about, #project...) se desplazan con Lenis
@@ -40,43 +55,53 @@ function handleAnchors(lenis) {
 
 function splitTitles() {
   document.querySelectorAll("[data-split]").forEach((el) => {
+    const hero = inHero(el);
     SplitText.create(el, {
       type: "lines,chars",
       mask: "lines",
-      autoSplit: true,
-      onSplit: (self) =>
-        gsap.from(self.chars, {
+      // El título del hero no se re-divide: sus líneas ya están fijas por los <br>, y sus
+      // letras cambian de grosor con el cursor (al ensancharse, autoSplit las regeneraría
+      // y les borraría el grosor)
+      autoSplit: !hero,
+      onSplit: (self) => {
+        const tween = gsap.from(self.chars, {
           yPercent: 110,
           duration: 1.1,
           ease: "expo.out",
           stagger: 0.016,
-          delay: heroDelay(el),
-          scrollTrigger: { trigger: el, start: "top 88%", once: true },
-        }),
+          delay: hero ? 0.15 : 0,
+          scrollTrigger: hero ? undefined : { trigger: el, start: "top 88%", once: true },
+        });
+        return hero ? playAfterIntro(tween) : tween;
+      },
     });
   });
 }
 
 function revealBlocks() {
   gsap.utils.toArray("[data-reveal]").forEach((el) => {
-    gsap.from(el, {
+    const hero = inHero(el);
+    const tween = gsap.from(el, {
       y: 32,
       autoAlpha: 0,
       duration: 1,
       ease: "expo.out",
-      delay: heroDelay(el) ? HERO_DELAY + 0.3 : 0,
-      scrollTrigger: { trigger: el, start: "top 92%", once: true },
+      delay: hero ? 0.45 : 0,
+      scrollTrigger: hero ? undefined : { trigger: el, start: "top 92%", once: true },
     });
+    if (hero) playAfterIntro(tween);
   });
 }
 
 function heroDetails() {
-  gsap.from(".hero-wordmark svg", {
-    yPercent: 100,
-    duration: 1.4,
-    ease: "expo.out",
-    delay: HERO_DELAY,
-  });
+  playAfterIntro(
+    gsap.from(".hero-wordmark svg", {
+      yPercent: 100,
+      duration: 1.4,
+      ease: "expo.out",
+      delay: 0.25,
+    })
+  );
 
   document.querySelectorAll("[data-parallax]").forEach((el) => {
     gsap.to(el, {
@@ -117,6 +142,12 @@ export async function initMotion() {
   gsap.ticker.add((time) => lenis.raf(time * 1000));
   gsap.ticker.lagSmoothing(0);
   handleAnchors(lenis);
+
+  // Mientras está la pantalla de carga no se puede scrollear
+  if (showIntro) {
+    lenis.stop();
+    introDone.then(() => lenis.start());
+  }
 
   await document.fonts.ready;
 

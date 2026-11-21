@@ -10,15 +10,24 @@
 
       <div class="about-grid">
         <div class="about-text">
-          <p class="lead" data-reveal>
-            Explorando la intersección entre el desarrollo web y el diseño
-            multimedia para crear proyectos innovadores y funcionales.
+          <p class="lead about-lead" data-reveal>
+            Diseño y desarrollo sitios y productos digitales, del primer boceto hasta
+            que están online. Cada vez más los conecto con IA: chatbots que atienden
+            consultas, automatizaciones que mueven mensajes entre WhatsApp y email y
+            tableros que se actualizan solos.
           </p>
-          <p class="muted" data-reveal>
-            Desarrollador web con experiencia en interfaces de usuario y diseño.
-            Trabajo con Vue, JavaScript, Node.js y Firebase; diseño en Figma y
-            Photoshop; y uso IA (Claude, Groq) para prototipar y construir
-            productos reales.
+          <p class="about-body" data-reveal>
+            Mi trabajo combina desarrollo web, diseño de interfaces, inteligencia
+            artificial aplicada y automatización de procesos. En el día a día
+            desarrollo con Vue, JavaScript y Node.js, guardo datos en Firebase y
+            MongoDB, y uso WordPress cuando el proyecto pide un gestor de
+            contenidos. Para el diseño trabajo en Figma, Photoshop y After Effects.
+          </p>
+          <p class="about-body" data-reveal>
+            Me interesan especialmente los asistentes con IA, la automatización con
+            n8n, Make y Zapier, y los productos que conectan canales como WhatsApp y
+            email. De ahí salieron proyectos propios como Cauce, Sukata y Pulso,
+            además de sitios para marcas como Avifauna, FPB Solar y Village Polo Club.
           </p>
         </div>
 
@@ -41,98 +50,39 @@
             </div>
           </dl>
           <div class="profile-actions">
-            <a href="/diegoCv.pdf" download class="btn">
-              Descargar CV <span class="arrow" aria-hidden="true">↓</span>
+            <a href="/diegoCv.pdf" target="_blank" rel="noopener noreferrer" class="btn">
+              Ver CV <span class="arrow" aria-hidden="true">→</span>
             </a>
-            <a
-              href="https://github.com/diegorosso"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="btn btn--ghost"
-            >
-              GitHub <span class="arrow" aria-hidden="true">↗</span>
+            <a href="/diegoCv.pdf" download class="btn btn--ghost">
+              Descargar CV
+              <span class="btn-meta">PDF <span class="arrow" aria-hidden="true">↓</span></span>
             </a>
           </div>
         </aside>
       </div>
 
-      <div class="about-tabs">
-        <div class="tab-list" role="tablist" aria-label="Más sobre mí">
-          <button
-            v-for="(tab, index) in tabs"
-            :key="tab.id"
-            :id="`tab-${tab.id}`"
-            type="button"
-            role="tab"
-            class="tab-btn label"
-            :class="{ active: activeTab === tab.id }"
-            :aria-selected="activeTab === tab.id"
-            :aria-controls="`panel-${tab.id}`"
-            :tabindex="activeTab === tab.id ? 0 : -1"
-            @click="activeTab = tab.id"
-            @keydown.right.prevent="moveTab(1)"
-            @keydown.left.prevent="moveTab(-1)"
-          >
-            <span class="label-dim">{{ String(index + 1).padStart(2, "0") }}</span>
-            {{ tab.label }}
-          </button>
-        </div>
+      <Skills />
 
-        <div
-          v-for="tab in tabs"
-          v-show="activeTab === tab.id"
-          :key="tab.id"
-          :id="`panel-${tab.id}`"
-          role="tabpanel"
-          :aria-labelledby="`tab-${tab.id}`"
-          class="tab-panel"
-        >
-          <Skills v-if="tab.id === 'skills'" />
-          <Experience v-else-if="tab.id === 'experience'" />
-          <Flyers v-else />
-        </div>
-      </div>
+      <Experience />
     </div>
   </section>
 </template>
 
 <script setup>
-import { ref, nextTick } from "vue";
 import SectionHead from "./SectionHead.vue";
 import Skills from "./Skills.vue";
 import Experience from "./Experience.vue";
-import Flyers from "./flyers.vue";
 
-const tabs = [
-  { id: "skills", label: "Tecnologías" },
-  { id: "experience", label: "Experiencia" },
-  { id: "designs", label: "Diseños" },
-];
-
-const activeTab = ref("skills");
-
-const moveTab = async (step) => {
-  const index = tabs.findIndex((tab) => tab.id === activeTab.value);
-  const next = tabs[(index + step + tabs.length) % tabs.length];
-  activeTab.value = next.id;
-  await nextTick();
-  document.getElementById(`tab-${next.id}`)?.focus();
-};
-
+// Como la ficha de la referencia: datos de contexto, no de contacto
+// (teléfono y redes siguen en Contacto y en el pie)
 const profile = [
-  { key: "Nombre", value: "Diego Rosso" },
   { key: "Base", value: "San Isidro, AR" },
-  { key: "Rol", value: "Desarrollador web" },
-  { key: "Teléfono", value: "11 3145 3388", href: "https://wa.me/541131453388" },
+  { key: "Rol", value: "Desarrollador web y diseñador" },
+  { key: "Foco", value: "Web · IA · Automatización" },
   {
     key: "Email",
     value: "diegorosso1988@gmail.com",
     href: "mailto:diegorosso1988@gmail.com",
-  },
-  {
-    key: "LinkedIn",
-    value: "in/diegorosso1988",
-    href: "https://www.linkedin.com/in/diegorosso1988/",
   },
 ];
 </script>
@@ -147,23 +97,57 @@ const profile = [
   display: grid;
   gap: 24px;
   align-content: start;
-  max-width: 62ch;
 }
 
+/* Texto principal grande, como en la referencia: tres o cuatro líneas a lo ancho */
+.about-lead {
+  font-size: clamp(2.6rem, 1.4rem + 1.9vw, 4.6rem);
+  line-height: 1.08;
+  margin-block-end: 12px;
+}
+
+/* Mismo ancho que el texto principal, como en la referencia */
+.about-body {
+  color: var(--muted);
+  line-height: 1.65;
+}
+
+/* Ficha de perfil con cruces en dos esquinas, como en la referencia */
 .profile {
-  display: grid;
+  position: relative;
+  display: flex;
+  flex-direction: column;
   gap: 18px;
-  align-content: start;
   padding: 20px;
   border: 1px solid var(--line);
+}
+
+.profile::before,
+.profile::after {
+  content: "+";
+  position: absolute;
+  font-family: var(--fontFamily-mono);
+  font-size: 1.2rem;
+  line-height: 1;
+  color: var(--faint);
+}
+
+.profile::before {
+  top: -7px;
+  left: -4px;
+}
+
+.profile::after {
+  bottom: -7px;
+  right: -4px;
 }
 
 .profile-row {
   display: flex;
   justify-content: space-between;
   gap: 16px;
-  padding-block: 10px;
-  border-block-start: 1px solid var(--line);
+  padding-block: 11px;
+  border-block-end: 1px solid var(--line);
 }
 
 .profile-row dd {
@@ -184,66 +168,30 @@ const profile = [
   background-size: 100% 1px;
 }
 
+/* Dos botones del mismo ancho, con el texto a la izquierda y el ícono a la derecha */
 .profile-actions {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: 8px;
+  margin-block-start: auto; /* los botones quedan pegados al fondo de la ficha */
+  padding-block-start: 6px;
 }
 
-/* Pestañas */
-.about-tabs {
-  margin-block-start: 96px;
+.profile-actions .btn {
+  justify-content: space-between;
+  max-width: none;
 }
 
-.tab-list {
+.btn-meta {
   display: flex;
-  border-block-end: 1px solid var(--line);
-  overflow-x: auto;
+  gap: 0.8em;
+  color: var(--faint);
 }
 
-.tab-btn {
-  position: relative;
-  display: flex;
-  gap: 0.6em;
-  flex-shrink: 0;
-  padding: 14px 18px 14px 0;
-  margin-inline-end: 18px;
-  color: var(--muted);
-  transition: color var(--transition-1);
-}
-
-.tab-btn::after {
-  content: "";
-  position: absolute;
-  inset: auto 0 -1px 0;
-  height: 1px;
-  background-color: var(--paper);
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform 0.4s var(--ease-out);
-}
-
-.tab-btn:is(:hover, :focus-visible) {
-  color: var(--paper);
-}
-
-.tab-btn.active {
-  color: var(--paper);
-}
-
-.tab-btn.active::after {
-  transform: scaleX(1);
-}
-
-.tab-panel {
-  padding-block-start: 32px;
-  animation: fade 0.5s var(--ease-out);
-}
-
-@keyframes fade {
-  from {
-    opacity: 0;
-    transform: translateY(8px);
+/* En pantallas chicas los dos botones no entran lado a lado */
+@media (max-width: 479px) {
+  .profile-actions {
+    grid-template-columns: 1fr;
   }
 }
 
@@ -253,14 +201,13 @@ const profile = [
     gap: 80px;
   }
 
-  .about-tabs {
-    margin-block-start: 140px;
-  }
 }
 
 @media (min-width: 1400px) {
+  /* Proporción de la referencia: texto ancho a la izquierda, ficha angosta a la derecha */
   .about-grid {
-    grid-template-columns: 1.6fr 1fr;
+    grid-template-columns: minmax(0, 1.8fr) minmax(360px, 1fr);
+    gap: 120px;
   }
 }
 </style>

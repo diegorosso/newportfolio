@@ -1,55 +1,79 @@
 <template>
-  <ul class="experience">
-    <li v-for="(item, index) in items" :key="item.link" class="exp-card">
-      <a :href="item.link" target="_blank" rel="noopener noreferrer" class="exp-link">
-        <div class="exp-media">
-          <img :src="item.img" :alt="item.name" loading="lazy" />
+  <div class="experience" aria-labelledby="exp-title">
+    <header class="exp-head">
+      <h3 id="exp-title" class="display exp-title" data-split>Experiencia profesional</h3>
+      <p class="label label-dim">Trayectoria</p>
+    </header>
+
+    <ol class="exp-list">
+      <li v-for="(job, index) in jobs" :key="job.role + job.company" class="exp-row" data-reveal>
+        <p class="label exp-date">
+          <span>#{{ index + 1 }}</span>
+          <span class="label-dim">· {{ job.dates }}</span>
+        </p>
+
+        <div class="exp-role">
+          <h4 class="exp-role-title">{{ job.role }}</h4>
+          <p class="label label-dim">{{ job.company }}</p>
         </div>
-        <div class="exp-meta">
-          <span class="label label-dim">{{ String(index + 1).padStart(2, "0") }}</span>
-          <h3 class="h3">{{ item.name }}</h3>
-          <span class="label exp-cta">
-            {{ item.domain }} <span class="arrow" aria-hidden="true">↗</span>
-          </span>
+
+        <div class="exp-body">
+          <p class="exp-text">{{ job.text }}</p>
+          <ul class="chips">
+            <li v-for="tag in job.tags" :key="tag" class="chip">{{ tag }}</li>
+          </ul>
         </div>
-      </a>
-    </li>
-  </ul>
+      </li>
+    </ol>
+  </div>
 </template>
 
 <script>
-import tuImg from "../assets/images/tuseguroimagenlogo.png";
-import neImg from "../assets/images/neuremi.webp";
-import globalImg from "../assets/images/global.webp";
-import mercedesImg from "../assets/images/mercedes-qa.png";
-
 export default {
+  name: "ExperienceBlock",
   data() {
     return {
-      items: [
+      // Datos de tu CV (public/diegoCv.pdf)
+      jobs: [
         {
-          name: "Mercedes-Benz",
-          img: mercedesImg,
-          link: "https://www.mercedes-benz.com.ar",
-          domain: "mercedes-benz.com.ar",
+          dates: "Jun. 2026 — Actualidad",
+          role: "Desarrollador web y de aplicaciones",
+          company: "Subterránea Films",
+          text:
+            "Desarrollo y mantenimiento de las aplicaciones y los sitios web de la productora: nuevas funcionalidades e interfaces responsive, con IA para acelerar el desarrollo, la revisión y la depuración.",
+          tags: ["Aplicaciones y sitios web", "Interfaces responsive", "Desarrollo asistido con IA"],
         },
         {
-          name: "TuSeguro",
-          img: tuImg,
-          link: "https://tuseguro.insure",
-          domain: "tuseguro.insure",
+          dates: "Mar. 2025 — May. 2026",
+          role: "QA Tester",
+          company: "Syntagma Group · cliente Mercedes-Benz",
+          text:
+            "Diseño y ejecución de casos de prueba manuales en aplicaciones web, reporte de errores y verificación de las correcciones junto al equipo de desarrollo.",
+          tags: ["Testing manual", "Casos de prueba", "Reporte de errores", "Trabajo remoto"],
         },
         {
-          name: "Neuromify",
-          img: neImg,
-          link: "https://www.neuromify.com",
-          domain: "neuromify.com",
+          dates: "Ene. 2024 — Jul. 2025",
+          role: "Desarrollador de aplicaciones",
+          company: "Neuromify · España",
+          text:
+            "Componentes interactivos en Angular para una app de reducción del estrés y la ansiedad, con recursos multimedia y seguimiento personalizado, en trabajo conjunto con diseñadores y especialistas en salud mental.",
+          tags: ["Angular", "Componentes interactivos", "Recursos multimedia", "Trabajo remoto"],
         },
         {
-          name: "Global MKT",
-          img: globalImg,
-          link: "https://globalmkt.com.ar",
-          domain: "globalmkt.com.ar",
+          dates: "Ene. 2024 — Jul. 2025",
+          role: "Desarrollador web",
+          company: "Globalmkt · independiente",
+          text:
+            "Diseño e implementación de sitios a medida para marcas y clientes, optimizados para todos los dispositivos.",
+          tags: ["Vue", "Angular", "WordPress", "Sitios a medida"],
+        },
+        {
+          dates: "Nov. 2022 — Oct. 2023",
+          role: "Desarrollador front end Jr.",
+          company: "BA Managers · proyecto TuSeguro",
+          text:
+            "Frontend en Vue.js de una web de cotización de seguros online: componentes reutilizables, integración con APIs de cotización en tiempo real y mejoras de rendimiento y experiencia de uso, en un equipo Scrum.",
+          tags: ["Vue.js", "Componentes reutilizables", "APIs en tiempo real", "Scrum"],
         },
       ],
     };
@@ -59,69 +83,76 @@ export default {
 
 <style scoped>
 .experience {
-  display: grid;
-  gap: 1px;
-  background-color: var(--line);
-  border: 1px solid var(--line);
+  margin-block-start: 96px;
 }
 
-.exp-card {
-  background-color: var(--ink);
-}
-
-.exp-link {
-  display: grid;
-  height: 100%;
-}
-
-.exp-media {
-  aspect-ratio: 16 / 10;
-  overflow: hidden;
-  background-color: var(--surface);
-}
-
-.exp-media img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  filter: grayscale(1) contrast(1.05);
-  transition: filter 0.5s ease, transform 0.8s var(--ease-out);
-}
-
-.exp-link:is(:hover, :focus-visible) img {
-  filter: none;
-  transform: scale(1.04);
-}
-
-.exp-meta {
-  display: grid;
-  gap: 10px;
-  padding: 20px;
-}
-
-.exp-cta {
+.exp-head {
   display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px 24px;
+  padding-block-end: 32px;
+}
+
+.exp-title {
+  font-size: var(--fs-h2);
+  text-wrap: balance;
+}
+
+.exp-list {
+  border-block-start: 1px solid var(--line);
+}
+
+.exp-row {
+  display: grid;
+  gap: 14px;
+  padding-block: 28px;
+  border-block-end: 1px solid var(--line);
+}
+
+.exp-date {
+  display: flex;
+  flex-wrap: wrap;
   gap: 0.6em;
+}
+
+.exp-role-title {
+  font-family: var(--fontFamily-display);
+  font-weight: var(--weight-regular);
+  font-size: var(--fs-h3);
+  line-height: 1;
+  margin-block-end: 8px;
+  text-wrap: balance;
+}
+
+.exp-body {
+  display: grid;
+  gap: 18px;
+  align-content: start;
+}
+
+.exp-text {
   color: var(--muted);
+  line-height: 1.65;
 }
 
-.exp-link:is(:hover, :focus-visible) .arrow {
-  transform: translate(2px, -2px);
+.exp-row .chip {
+  padding: 4px 9px;
+  font-size: 1.05rem;
 }
 
-.arrow {
-  transition: transform var(--transition-1);
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
 }
 
-@media (min-width: 640px) {
-  .experience {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (min-width: 1200px) {
-  .experience {
-    grid-template-columns: repeat(4, 1fr);
+@media (min-width: 992px) {
+  .exp-row {
+    grid-template-columns: minmax(150px, 0.7fr) minmax(0, 1.4fr) minmax(0, 2fr);
+    gap: 32px;
+    padding-block: 36px;
   }
 }
 </style>
