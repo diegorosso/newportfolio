@@ -10,11 +10,10 @@
 
       <div class="about-grid">
         <div class="about-text">
-          <p class="lead about-lead" data-reveal>
-            Diseño y desarrollo sitios y productos digitales, del primer boceto hasta
-            que están online. Cada vez más los conecto con IA: chatbots que atienden
-            consultas, automatizaciones que mueven mensajes entre WhatsApp y email y
-            tableros que se actualizan solos.
+          <p class="lead about-lead" data-words>
+            Soy desarrollador web con base en diseño gráfico. Armo sitios y productos
+            digitales completos, y trabajo con IA y automatización para que resuelvan
+            tareas reales.
           </p>
           <p class="about-body" data-reveal>
             Mi trabajo combina desarrollo web, diseño de interfaces, inteligencia

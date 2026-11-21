@@ -197,6 +197,17 @@ body.nav-active {
   background-color: var(--line-strong);
 }
 
+/* Marco fino alrededor de toda la pantalla, a 8 px del borde, como en la referencia.
+   Queda sobre el header (40) y debajo de la pantalla de carga (45) */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 8px;
+  z-index: 44;
+  border: 1px solid color-mix(in srgb, var(--paper) 28%, transparent);
+  pointer-events: none;
+}
+
 /* Grano de película sobre toda la página */
 body::after {
   content: "";

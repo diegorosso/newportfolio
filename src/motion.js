@@ -78,6 +78,31 @@ function splitTitles() {
   });
 }
 
+/**
+ * Texto que se enciende palabra por palabra con el scroll, como el párrafo principal de
+ * Sobre mí en la referencia: arranca apagado (38 %) y cada palabra pasa a 100 % mientras el
+ * texto sube de la parte baja de la pantalla hacia el medio. Medido en christendijoux.com.
+ */
+function scrubWords() {
+  document.querySelectorAll("[data-words]").forEach((el) => {
+    SplitText.create(el, {
+      type: "words",
+      autoSplit: true,
+      onSplit: (self) =>
+        gsap.fromTo(
+          self.words,
+          { opacity: 0.38 },
+          {
+            opacity: 1,
+            ease: "none",
+            stagger: 0.12,
+            scrollTrigger: { trigger: el, start: "top 82%", end: "top 40%", scrub: true },
+          }
+        ),
+    });
+  });
+}
+
 function revealBlocks() {
   gsap.utils.toArray("[data-reveal]").forEach((el) => {
     const hero = inHero(el);
@@ -152,6 +177,7 @@ export async function initMotion() {
   await document.fonts.ready;
 
   splitTitles();
+  scrubWords();
   revealBlocks();
   heroDetails();
   refreshOnResize();

@@ -61,11 +61,22 @@
       </div>
 
       <!-- Derecha: formulario tipo terminal, como en la referencia -->
-      <form class="contact-form" data-reveal @submit.prevent="send">
+      <form class="contact-form" data-reveal novalidate @submit.prevent="send">
         <p class="label form-head" aria-hidden="true">
           <span>&gt; nuevo_mensaje <span class="caret">_</span></span>
           <span class="label-dim">✳</span>
         </p>
+
+        <!-- Campo trampa: los humanos no lo ven; los bots lo llenan y el envío se descarta -->
+        <input
+          v-model="form.website"
+          type="text"
+          name="website"
+          tabindex="-1"
+          autocomplete="off"
+          aria-hidden="true"
+          class="field-trap"
+        />
 
         <label class="field">
           <span class="label"><span class="label-dim">01 ·</span> Nombre</span>
@@ -107,33 +118,78 @@
         </label>
 
         <div class="form-foot">
-          <button type="submit" class="btn">
-            Enviar mensaje <span class="arrow" aria-hidden="true">→</span>
+          <button type="submit" class="btn" :disabled="status === 'sending'">
+            {{ status === "sending" ? "Enviando…" : "Enviar mensaje" }}
+            <span class="arrow" aria-hidden="true">→</span>
           </button>
           <span class="label label-dim">{{ form.message.length }} / {{ MAX_MESSAGE }}</span>
         </div>
+
+        <p class="form-status label" :class="status" role="status" aria-live="polite">
+          <template v-if="status === 'sent'">
+            Mensaje enviado. Te respondo a la brevedad.
+          </template>
+          <template v-else-if="status === 'error'">
+            {{ errorText }}
+            <a :href="mailtoHref" class="status-link">Escribime directo →</a>
+          </template>
+        </p>
       </form>
     </div>
   </section>
 </template>
 
 <script setup>
-import { reactive } from "vue";
+import { computed, reactive, ref } from "vue";
 import SectionHead from "./SectionHead.vue";
 
 const EMAIL = "diegorosso1988@gmail.com";
 const MAX_MESSAGE = 1000;
 
-const form = reactive({ name: "", email: "", message: "" });
+const form = reactive({ name: "", email: "", message: "", website: "" });
+const status = ref("idle"); // idle | sending | sent | error
+const errorText = ref("");
 
-/**
- * Antes el formulario se mandaba a ./index.html y el mensaje se perdía.
- * Ahora abre el programa de correo de quien escribe, con el mensaje ya armado.
- */
-function send() {
+const messages = {
+  name: "Falta tu nombre.",
+  email: "Revisá el email: no parece válido.",
+  message: "Escribí un mensaje (hasta 1000 caracteres).",
+  rate: "Ya enviaste un mensaje hace un momento. Probá de nuevo en unos segundos.",
+};
+
+/** Plan B si el envío falla: abrir el correo de quien escribe con el mensaje armado */
+const mailtoHref = computed(() => {
   const subject = `Contacto desde el portfolio — ${form.name}`;
-  const body = `${form.message}\n\n${form.name}\n${form.email}`;
-  window.location.href = `mailto:${EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  const body = `${form.message}
+
+${form.name}
+${form.email}`;
+  return `mailto:${EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+});
+
+async function send() {
+  if (status.value === "sending") return;
+  status.value = "sending";
+  errorText.value = "";
+
+  try {
+    const response = await fetch("/send.php", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ ...form }),
+    });
+    const result = await response.json().catch(() => ({}));
+
+    if (response.ok && result.ok) {
+      status.value = "sent";
+      form.name = form.email = form.message = "";
+      return;
+    }
+    errorText.value = messages[result.error] ?? "No se pudo enviar el mensaje.";
+  } catch {
+    errorText.value = "No se pudo enviar el mensaje.";
+  }
+  status.value = "error";
 }
 
 const contactItems = [
@@ -353,6 +409,55 @@ a.row-value:is(:hover, :focus-visible) .row-arrow {
   font-size: var(--fs-body);
   outline: none;
   transition: border-color var(--transition-1);
+}
+
+/* El autocompletado de Chrome pinta los campos de celeste; se mantiene el fondo y el color del sitio */
+.field-input:-webkit-autofill,
+.field-input:-webkit-autofill:hover,
+.field-input:-webkit-autofill:focus {
+  -webkit-text-fill-color: var(--paper);
+  caret-color: var(--paper);
+  box-shadow: 0 0 0 1000px var(--ink) inset;
+  transition: background-color 9999s ease-out;
+}
+
+/* Campo trampa anti-spam: fuera de la pantalla, no es para personas */
+.field-trap {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.form-status {
+  min-height: 1.5em;
+  color: var(--muted);
+}
+
+.form-status.sent {
+  color: var(--paper);
+}
+
+.form-status.sent::before {
+  content: "✓ ";
+}
+
+.form-status.error {
+  color: var(--paper);
+}
+
+.status-link {
+  display: inline;
+  margin-inline-start: 0.6em;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.btn:disabled {
+  opacity: 0.55;
+  cursor: progress;
 }
 
 .field-input::placeholder {
