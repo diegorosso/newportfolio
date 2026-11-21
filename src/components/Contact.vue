@@ -159,7 +159,7 @@ const messages = {
 
 /** Plan B si el envío falla: abrir el correo de quien escribe con el mensaje armado */
 const mailtoHref = computed(() => {
-  const subject = `Contacto desde el portfolio — ${form.name}`;
+  const subject = `Nuevo mensaje de ${form.name}`;
   const body = `${form.message}
 
 ${form.name}

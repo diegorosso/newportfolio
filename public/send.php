@@ -73,13 +73,13 @@ if (is_file($stamp) && time() - (int) filemtime($stamp) < COOLDOWN_SECONDS) {
     respond(429, false, 'rate');
 }
 
-$subject = '=?UTF-8?B?' . base64_encode("Contacto desde el portfolio — $name") . '?=';
+$subject = '=?UTF-8?B?' . base64_encode("Nuevo mensaje de $name") . '?=';
 $body = "Nombre: $name\nEmail: $email\n\n$message\n";
 
 // El remitente tiene que ser del propio dominio, si no el hosting lo rechaza o cae en spam
 $fromHost = preg_match('/^[a-z0-9.-]+$/i', $host) ? $host : 'localhost';
 $headers = [
-    'From: Portfolio <no-reply@' . $fromHost . '>',
+    'From: Diego Rosso Web <no-reply@' . $fromHost . '>',
     'Reply-To: ' . $name . ' <' . $email . '>',
     'MIME-Version: 1.0',
     'Content-Type: text/plain; charset=UTF-8',
