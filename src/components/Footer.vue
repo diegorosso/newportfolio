@@ -1,7 +1,7 @@
 <template>
   <footer class="footer">
-    <!-- Relieve interactivo con el nombre: la imagen de alturas sale de Unreal -->
-    <FooterRidges :poster="relief.poster" :videos="relief.videos" />
+    <!-- Líneas al estilo "Unknown Pleasures" con el nombre -->
+    <FooterRidges />
 
     <div class="footer-bar wrap">
       <p class="label">© {{ year }} Diego Rosso</p>
@@ -34,20 +34,8 @@
 
 <script setup>
 import FooterRidges from "./FooterRidges.vue";
-// Mapa de alturas hecho en Unreal (macizo montañoso): blanco = alto, negro = plano
-import reliefPoster from "../assets/images/relieve.webp";
-import reliefWebm from "../assets/videos/relieve.webm";
-import reliefMp4 from "../assets/videos/relieve.mp4";
 
 const year = new Date().getFullYear();
-
-const relief = {
-  poster: reliefPoster,
-  videos: [
-    { src: reliefWebm, type: 'video/webm; codecs="vp9"' },
-    { src: reliefMp4, type: 'video/mp4; codecs="avc1.64001F"' },
-  ],
-};
 </script>
 
 <style scoped>
