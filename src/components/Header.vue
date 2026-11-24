@@ -29,7 +29,7 @@
 
       <div class="header-actions">
         <Mode />
-        <a href="/diegoCv.pdf" download class="btn btn--ghost cv-btn">
+        <a href="/diegoRosso.pdf" download="diegoRosso.pdf" class="btn btn--ghost cv-btn">
           CV <span class="arrow" aria-hidden="true">↓</span>
         </a>
         <button
@@ -52,7 +52,7 @@
           </a>
         </li>
       </ul>
-      <a href="/diegoCv.pdf" download class="btn" @click="closeNav">
+      <a href="/diegoRosso.pdf" download="diegoRosso.pdf" class="btn" @click="closeNav">
         Descargar CV <span class="arrow" aria-hidden="true">↓</span>
       </a>
     </div>
@@ -74,7 +74,7 @@ export default {
       ],
       rightLinks: [
         { number: "03", label: "Contacto", href: "#contact" },
-        { number: "04", label: "CV", href: "/diegoCv.pdf", download: true },
+        { number: "04", label: "CV", href: "/diegoRosso.pdf", download: "diegoRosso.pdf" },
       ],
     };
   },

@@ -33,7 +33,7 @@ export default {
   name: "ExperienceBlock",
   data() {
     return {
-      // Datos de tu CV (public/diegoCv.pdf)
+      // Datos de tu CV (public/diegoRosso.pdf)
       jobs: [
         {
           dates: "Jun. 2026 — Actualidad",

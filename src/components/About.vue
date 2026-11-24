@@ -49,10 +49,10 @@
             </div>
           </dl>
           <div class="profile-actions">
-            <a href="/diegoCv.pdf" target="_blank" rel="noopener noreferrer" class="btn">
+            <a href="/diegoRosso.pdf" target="_blank" rel="noopener noreferrer" class="btn">
               Ver CV <span class="arrow" aria-hidden="true">→</span>
             </a>
-            <a href="/diegoCv.pdf" download class="btn btn--ghost">
+            <a href="/diegoRosso.pdf" download="diegoRosso.pdf" class="btn btn--ghost">
               Descargar CV
               <span class="btn-meta">PDF <span class="arrow" aria-hidden="true">↓</span></span>
             </a>
