@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<title>Diego Rosso — CV</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800&family=Geist:wght@300;400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  @page { size: A4; margin: 0; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: #fff; }
+  body {
+    width: 210mm; height: 297mm; padding: 12mm 14mm 10mm;
+    font: 400 8.3pt/1.42 "Geist", sans-serif; color: #0a0a0a;
+    display: flex; flex-direction: column; overflow: hidden;
+  }
+
+  header { display: flex; justify-content: space-between; align-items: flex-start; padding-bottom: 14px; border-bottom: 2px solid #0a0a0a; }
+  h1 { font: 800 50pt/0.9 "Big Shoulders Display", sans-serif; text-transform: uppercase; letter-spacing: 0.005em; }
+  .role { margin-top: 11px; font: 400 6.9pt/1 "Geist Mono", monospace; letter-spacing: 0.14em; text-transform: uppercase; color: #444; }
+  .contact { text-align: right; font: 400 7.3pt/1.6 "Geist Mono", monospace; color: #222; padding-top: 4px; }
+
+  .cols { display: grid; grid-template-columns: 1fr 58mm; gap: 0 10mm; margin-top: 11px; flex: 1; }
+  .label { display: flex; gap: 10px; font: 500 6.9pt/1 "Geist Mono", monospace; letter-spacing: 0.16em; text-transform: uppercase; padding-bottom: 6px; border-bottom: 1px solid #c9c9c9; margin-bottom: 8px; }
+  .label i { font-style: normal; color: #777; }
+  section { margin-bottom: 14px; }
+
+  .lead { font-size: 9.2pt; line-height: 1.45; color: #111; }
+  .lead b { font-weight: 600; }
+
+  .job { display: grid; grid-template-columns: 20mm 1fr; gap: 0 10px; margin-bottom: 10px; }
+  .when { font: 400 6.4pt/1.5 "Geist Mono", monospace; letter-spacing: 0.04em; text-transform: uppercase; color: #666; padding-top: 4px; }
+  h3 { font: 700 13pt/1.05 "Big Shoulders Display", sans-serif; letter-spacing: 0.005em; }
+  .org { color: #555; font-size: 8.2pt; margin: 2px 0 5px; }
+  .job ul { list-style: none; }
+  .job li { position: relative; padding-left: 13px; margin-bottom: 3px; }
+  .job li::before { content: "—"; position: absolute; left: 0; color: #777; }
+
+  .grp { margin-bottom: 7px; }
+  .grp .g { font: 400 6.2pt/1.2 "Geist Mono", monospace; letter-spacing: 0.1em; text-transform: uppercase; color: #777; margin-bottom: 3px; }
+  .grp p { color: #111; }
+  .edu { margin-bottom: 6px; }
+  .edu h3 { font-size: 11pt; }
+  .edu span { display: block; color: #555; font-size: 7.9pt; }
+  .edu .y { font: 400 6.4pt/1.5 "Geist Mono", monospace; color: #777; letter-spacing: 0.05em; }
+  .strengths { list-style: none; }
+  .strengths li { position: relative; padding-left: 13px; margin-bottom: 5px; }
+  .strengths li::before { content: "—"; position: absolute; left: 0; color: #777; }
+
+  footer { display: flex; justify-content: space-between; font: 400 6.6pt/1 "Geist Mono", monospace; letter-spacing: 0.04em; color: #888; padding-top: 8px; border-top: 1px solid #c9c9c9; }
+</style>
+</head>
+<body>
+  <header>
+    <div>
+      <h1>Diego Rosso</h1>
+      <p class="role">Desarrollador web full stack · Vue, Node.js e IA aplicada</p>
+    </div>
+    <div class="contact">
+      diegorosso1988@gmail.com<br />
+      11 3145 3388<br />
+      diegorosso.com<br />
+      linkedin.com/in/diegorosso1988<br />
+      github.com/diegorosso<br />
+      San Isidro, Buenos Aires
+    </div>
+  </header>
+
+  <div class="cols">
+    <main>
+      <section>
+        <div class="label"><i>01</i> Perfil</div>
+        <p class="lead">Armo sitios y productos digitales completos, de la interfaz al servidor, con base en <b>diseño gráfico</b>. Tengo más de cuatro años de experiencia y hoy trabajo con <b>Vue 3, Node.js y Supabase</b>. Sumo IA y automatización para que resuelvan tareas reales: chatbots, paneles que conectan WhatsApp y email, y dashboards con datos en vivo. Uso Claude todos los días para escribir, revisar y depurar código, y valido todo lo que entrego.</p>
+      </section>
+
+      <section>
+        <div class="label"><i>02</i> Experiencia</div>
+
+        <div class="job">
+          <div class="when">Jun. 2026 –<br />actualidad</div>
+          <div>
+            <h3>Desarrollador Web y de Aplicaciones</h3>
+            <div class="org">Subterránea Films</div>
+            <ul>
+              <li>Desarrollo y mantenimiento de las aplicaciones y sitios de la productora.</li>
+              <li>Nuevas funciones e interfaces responsive con JavaScript y frameworks modernos.</li>
+              <li>IA aplicada para acelerar el desarrollo, la revisión y la depuración.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="job">
+          <div class="when">Mar. 2025 –<br />may. 2026</div>
+          <div>
+            <h3>QA Tester</h3>
+            <div class="org">Syntagma Group (cliente Mercedes-Benz) · part-time · remoto</div>
+            <ul>
+              <li>Diseño y ejecución de casos de prueba manuales en aplicaciones web.</li>
+              <li>Reporte de errores y verificación de correcciones junto al equipo de desarrollo.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="job">
+          <div class="when">Ene. 2024 –<br />jul. 2025</div>
+          <div>
+            <h3>Desarrollador de Aplicaciones</h3>
+            <div class="org">Neuromify (España) · remoto</div>
+            <ul>
+              <li>Componentes interactivos en Angular para una app que reduce el estrés y la ansiedad.</li>
+              <li>Recursos multimedia y seguimiento personalizado de cada usuario.</li>
+              <li>Trabajo junto a diseñadores y especialistas en salud mental.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="job">
+          <div class="when">Ene. 2024 –<br />jul. 2025</div>
+          <div>
+            <h3>Desarrollador Web</h3>
+            <div class="org">Globalmkt · independiente</div>
+            <ul>
+              <li>Diseño e implementación de sitios a medida para marcas y clientes, con Vue, Angular y WordPress.</li>
+              <li>Optimización para todos los dispositivos.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="job">
+          <div class="when">Nov. 2022 –<br />oct. 2023</div>
+          <div>
+            <h3>Desarrollador Front End Jr.</h3>
+            <div class="org">BA Managers (proyecto TuSeguro) · remoto</div>
+            <ul>
+              <li>Frontend en Vue.js de una web de cotización de seguros online, con componentes reutilizables.</li>
+              <li>Integración con APIs de cotización en tiempo real.</li>
+              <li>Mejoras de rendimiento y UX dentro de un equipo Scrum.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <aside>
+      <section>
+        <div class="label"><i>03</i> Stack</div>
+        <div class="grp"><div class="g">Frontend</div><p>Vue 3 · Vite · Vue Router · Tailwind CSS · JavaScript · HTML5 · CSS / Sass · Angular · React</p></div>
+        <div class="grp"><div class="g">Backend y datos</div><p>Node.js · APIs REST · funciones serverless · Supabase · Firebase · MongoDB</p></div>
+        <div class="grp"><div class="g">IA</div><p>Groq + Llama 3.1 · Google Gemini API · chatbots · Claude (desarrollo asistido)</p></div>
+        <div class="grp"><div class="g">Automatización</div><p>n8n · Make · Zapier · integraciones por API y webhooks</p></div>
+        <div class="grp"><div class="g">3D y tiempo real</div><p>Unreal Engine · TouchDesigner · WebGL · GSAP</p></div>
+        <div class="grp"><div class="g">Herramientas</div><p>Git · GitHub · Netlify · WordPress · Figma · Scrum · testing manual (QA)</p></div>
+      </section>
+
+      <section>
+        <div class="label"><i>04</i> Formación</div>
+        <div class="edu"><div class="y">2023 – 2024</div><h3>Vue.js y JavaScript</h3><span>Coderhouse</span></div>
+        <div class="edu"><div class="y">2022</div><h3>Desarrollo web con Angular</h3><span>Yo Programo · Argentina Programa</span></div>
+        <div class="edu"><div class="y">2021</div><h3>Introducción a la programación</h3><span>Argentina Programa</span></div>
+        <div class="edu"><div class="y">Sin finalizar</div><h3>Diseño Gráfico</h3><span>UBA</span></div>
+        <div class="edu"><div class="y">Previa</div><h3>Arte, Diseño y Comunicación</h3><span>Centro Polivalente de Artes</span></div>
+      </section>
+
+      <section>
+        <div class="label"><i>05</i> Idiomas</div>
+        <p>Español: nativo</p>
+      </section>
+
+      <section>
+        <div class="label"><i>06</i> Fortalezas</div>
+        <ul class="strengths">
+          <li>Productos con IA aplicada, validados antes de entregar.</li>
+          <li>Base en diseño gráfico: interfaces cuidadas hasta el detalle.</li>
+          <li>Trabajo remoto y ágil con equipos de Argentina y España.</li>
+        </ul>
+      </section>
+    </aside>
+  </div>
+
+  <footer>
+    <span>Diego Rosso · diegorosso1988@gmail.com</span>
+    <span>diegorosso.com · 1 / 1</span>
+  </footer>
+</body>
+</html>
