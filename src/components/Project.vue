@@ -112,7 +112,7 @@ export default {
           description:
             "Diseño y desarrollo del sitio de NGEN – Ciclos de un bosque imaginario, una obra audiovisual en cuatro actos: video del bosque hecho en Unreal, versión en español e inglés y un panel para sumarse.",
           tags: ["React", "TypeScript", "Tailwind"],
-          link: "https://hushed-lavenderblush-bat-09.hostingersite.com/",
+          link: "https://ngen.ar/",
           cta: "Ver sitio",
         },
       ],
