@@ -266,7 +266,6 @@ onBeforeUnmount(() => {
 
 .ridges-letter {
   font-weight: 250;
-  transition: font-weight 0.35s var(--ease-out);
 }
 
 .ridges-space {

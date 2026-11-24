@@ -337,10 +337,6 @@ export default {
   font-weight: 250;
 }
 
-.hero-title :deep(div) {
-  transition: font-weight 0.35s var(--ease-out);
-}
-
 /* Las máscaras de línea de SplitText recortan en vertical (para la animación de entrada)
    pero no a los costados: una letra que engorda no se corta */
 .hero-title > :deep(div) {
